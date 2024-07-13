@@ -2,7 +2,6 @@ package ar.com.BootApp.LautaroV_Boot.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,23 +12,20 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-@Table(name = "books-enders-")
-
-/**
- * This entity represents the gender that Books will have
- */
-public class BookGenders {
+@Table(name = "tools-kind-")
+public class ToolKind {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String gender;
-    @ManyToMany(mappedBy = "gender")
+    @Column(name = "tool_kind")
+    private String toolKind;
+    @ManyToMany(mappedBy = "kind")
     @JsonIgnore
-    private List<Book> titles;
+    private List<Tool> tools;
 
-    public BookGenders(Long id, String gender) {
+    public ToolKind(Long id, String toolKind) {
         this.id = id;
-        this.gender = gender;
+        this.toolKind = toolKind;
     }
 }
