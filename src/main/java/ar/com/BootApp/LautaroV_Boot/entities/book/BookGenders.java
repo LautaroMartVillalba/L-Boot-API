@@ -1,8 +1,7 @@
-package ar.com.BootApp.LautaroV_Boot.entities;
+package ar.com.BootApp.LautaroV_Boot.entities.book;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

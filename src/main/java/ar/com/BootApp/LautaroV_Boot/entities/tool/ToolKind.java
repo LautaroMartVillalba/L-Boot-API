@@ -1,4 +1,4 @@
-package ar.com.BootApp.LautaroV_Boot.entities;
+package ar.com.BootApp.LautaroV_Boot.entities.tool;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;

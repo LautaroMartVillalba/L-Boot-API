@@ -1,13 +1,13 @@
 package ar.com.BootApp.LautaroV_Boot;
 
-import ar.com.BootApp.LautaroV_Boot.entities.Book;
-import ar.com.BootApp.LautaroV_Boot.entities.Tool;
-import ar.com.BootApp.LautaroV_Boot.entities.ToolKind;
-import ar.com.BootApp.LautaroV_Boot.repositories.BookGendersRepository;
-import ar.com.BootApp.LautaroV_Boot.repositories.BookRepository;
-import ar.com.BootApp.LautaroV_Boot.entities.BookGenders;
-import ar.com.BootApp.LautaroV_Boot.repositories.ToolKindRepository;
-import ar.com.BootApp.LautaroV_Boot.repositories.ToolRepository;
+import ar.com.BootApp.LautaroV_Boot.entities.book.Book;
+import ar.com.BootApp.LautaroV_Boot.entities.car.Car;
+import ar.com.BootApp.LautaroV_Boot.entities.car.carEnums.CarColors;
+import ar.com.BootApp.LautaroV_Boot.entities.car.carEnums.CarCompany;
+import ar.com.BootApp.LautaroV_Boot.entities.tool.Tool;
+import ar.com.BootApp.LautaroV_Boot.entities.tool.ToolKind;
+import ar.com.BootApp.LautaroV_Boot.repositories.*;
+import ar.com.BootApp.LautaroV_Boot.entities.book.BookGenders;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
@@ -21,6 +21,7 @@ public class LautaroVBootApplication {
 		BookGendersRepository gendersRep = context.getBean(BookGendersRepository.class);
 		ToolRepository toolRep = context.getBean(ToolRepository.class);
 		ToolKindRepository toolKindRep = context.getBean(ToolKindRepository.class);
+		CarRepository carRep = context.getBean(CarRepository.class);
 
 		//fast test of books
 		BookGenders gender = new BookGenders(null, "Fiction");
@@ -45,6 +46,13 @@ public class LautaroVBootApplication {
 		toolRep.save(tool);
 		System.out.println("tools");
 		System.out.println(toolRep.findAll());
+
+		//fast test of cars
+		Car car = new Car(null, "Primario", CarCompany.TESLA, CarColors.DARKBLUE, 4, 800000, false);
+		carRep.save(car);
+		System.out.println("cars");
+		System.out.println(carRep.findAll());
+
 	}
 
 }
