@@ -22,7 +22,6 @@ public class Book {
     private Long id;
     private String title;
     private String author;
-
     /**
      * For convention; the schemas/tables by a relationship into two schemas will be built by:
      * {owner-class-name} + and + {second-class-name}

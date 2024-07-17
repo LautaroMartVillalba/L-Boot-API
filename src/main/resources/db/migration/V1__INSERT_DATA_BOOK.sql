@@ -1,0 +1,10 @@
+INSERT INTO books(available, pages, price, id, author, title) VALUES (true, 200, 350, 11, 'Josias', 'Libro de Enoc');
+INSERT INTO books(available, pages, price, id, author, title) VALUES (true, 350, 250, 12, 'Maria', 'Maria: Documental');
+INSERT INTO books(available, pages, price, id, author, title) VALUES (false, 60, 100, 13, 'Miguel', 'Los Siete Mosqueteros');
+INSERT INTO books(available, pages, price, id, author, title) VALUES (false, 600, 850, 14, 'Isayama', 'Shingeki No Kyojin');
+INSERT INTO books(available, pages, price, id, author, title) VALUES (true, 950, 1000, 5, 'Azumo', 'Solo Leveling');
+INSERT INTO books(available, pages, price, id, author, title) VALUES (true, 170, 80, 6, 'Toriyama', 'Dragon Ball');
+INSERT INTO books(available, pages, price, id, author, title) VALUES (true, 300, 250, 7, 'Gimnasio', 'Sam Sulek');
+INSERT INTO books(available, pages, price, id, author, title) VALUES (false, 350, 325, 8, 'Lautaro', 'Proyecto CBUM');
+INSERT INTO books(available, pages, price, id, author, title) VALUES (true, 500, 600, 9, 'Creatina', 'No daña riñones');
+INSERT INTO books(available, pages, price, id, author, title) VALUES (false, 380, 360, 10, 'Tanjiro', 'Camino de Luz');

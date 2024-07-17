@@ -1,4 +1,4 @@
-package ar.com.BootApp.LautaroV_Boot.repositories;
+package ar.com.BootApp.LautaroV_Boot.repositories.tool;
 
 import ar.com.BootApp.LautaroV_Boot.entities.tool.ToolKind;
 import org.springframework.data.jpa.repository.JpaRepository;

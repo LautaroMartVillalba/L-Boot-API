@@ -1,4 +1,4 @@
-package ar.com.BootApp.LautaroV_Boot.repositories;
+package ar.com.BootApp.LautaroV_Boot.repositories.book;
 
 import ar.com.BootApp.LautaroV_Boot.entities.book.BookGenders;
 import org.springframework.data.jpa.repository.JpaRepository;

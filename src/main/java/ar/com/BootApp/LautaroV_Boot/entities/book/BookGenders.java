@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-@Table(name = "books-enders-")
+@Table(name = "books-genders-")
 
 /**
  * This entity represents the gender that Books will have

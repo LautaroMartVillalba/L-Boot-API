@@ -1,4 +1,4 @@
-package ar.com.BootApp.LautaroV_Boot.repositories;
+package ar.com.BootApp.LautaroV_Boot.repositories.car;
 
 import ar.com.BootApp.LautaroV_Boot.entities.car.Car;
 import org.springframework.data.jpa.repository.JpaRepository;
