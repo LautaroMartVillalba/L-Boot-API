@@ -20,7 +20,7 @@ public class Car {
     @Enumerated(EnumType.STRING)
     private CarCompany company;
     @Enumerated(EnumType.STRING)
-    private CarColors color;
+    private CarColors colour;
     private int doors;
     private double price;
     private boolean traction4x4;
