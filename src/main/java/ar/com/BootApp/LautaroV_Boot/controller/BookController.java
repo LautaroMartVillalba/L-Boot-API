@@ -4,9 +4,10 @@ import ar.com.BootApp.LautaroV_Boot.entities.book.Book;
 import ar.com.BootApp.LautaroV_Boot.entities.book.BookGenders;
 import ar.com.BootApp.LautaroV_Boot.service.BookService;
 import lombok.AllArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+
+import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,9 +20,10 @@ public class BookController {
     private BookService service;
     /*----------------Default methods---------------*/
     @GetMapping("/all")
-    public List<Book> getAllBooks(){
+    public List<Book> getAllBooks(Pageable pageable){
         return service.findAllBooks();
     }
+
 
     @GetMapping("/by-id/{id}")
     public ResponseEntity<Optional<Book>> getBookById(@PathVariable Long id){
@@ -117,7 +119,7 @@ public class BookController {
     }
 
     @GetMapping("/title-gender/{title}/{gender}")
-    public ResponseEntity<List<Book>> findByTitleAndGender(@PathVariable String title,@PathVariable BookGenders gender){
+    public ResponseEntity<List<Book>> findByTitleAndGender(Pageable pageable, @PathVariable String title, @PathVariable BookGenders gender){
         List<Book> result = service.findByTitleAndGender(title, gender);
         if(result.isEmpty()){
             return ResponseEntity.notFound().build();

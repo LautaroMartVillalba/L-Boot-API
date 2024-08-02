@@ -1,4 +1,4 @@
-package ar.com.BootApp.LautaroV_Boot.repositories.book;
+package ar.com.BootApp.LautaroV_Boot.repositories;
 
 import ar.com.BootApp.LautaroV_Boot.entities.book.Book;
 import ar.com.BootApp.LautaroV_Boot.entities.book.BookGenders;
@@ -7,11 +7,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findByTitleContaining(String title);
+    List<Book> findByTitle(String title);
 
     List<Book> findByAuthorContaining(String author);
 
