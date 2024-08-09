@@ -1,7 +1,7 @@
 package ar.com.BootApp.LautaroV_Boot.entities.car;
 
-import ar.com.BootApp.LautaroV_Boot.entities.car.carEnums.CarColors;
-import ar.com.BootApp.LautaroV_Boot.entities.car.carEnums.CarCompany;
+import ar.com.BootApp.LautaroV_Boot.entities.car.enums.CarColors;
+import ar.com.BootApp.LautaroV_Boot.entities.car.enums.CarCompany;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,9 +17,9 @@ public class Car {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String model;
-    @Enumerated(EnumType.STRING)
+    @Enumerated(value = EnumType.STRING)
     private CarCompany company;
-    @Enumerated(EnumType.STRING)
+    @Enumerated(value = EnumType.STRING)
     private CarColors colour;
     private int doors;
     private double price;

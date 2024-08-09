@@ -1,10 +1,9 @@
-package ar.com.BootApp.LautaroV_Boot.service;
+package ar.com.BootApp.LautaroV_Boot.services;
 
 import ar.com.BootApp.LautaroV_Boot.entities.book.Book;
 import ar.com.BootApp.LautaroV_Boot.entities.book.BookGenders;
 import ar.com.BootApp.LautaroV_Boot.repositories.BookRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -32,7 +31,7 @@ public class BookService {
     //Default methods
 
     /**
-     *  Find and return all books in the DataBase.
+     *  Search and return all books in the DataBase.
      * @return List
      */
     public List<Book> findAllBooks(){
@@ -40,7 +39,7 @@ public class BookService {
     }
 
     /**
-     *  Find and return a book by his ID number.
+     *  Search and return a book by his ID number.
      * @param id Long type variable.
      * @return A book Optional object if it can. Optional.empty() if it can't.
      */
@@ -55,34 +54,31 @@ public class BookService {
 
     /**
      * Save or update a book in the DataBase.
+     *
      * @param book Book object to be saved.
-     * @return IllegalArgumentException if book is null. The book if it can save him;
      */
-    public Book saveBook(Book book) {
+    public void saveBook(Book book) {
         if (book == null) {
             throw new IllegalArgumentException("You are trying to insert a null book or one that already exists in database.");
         }
         repository.save(book);
-        return book;
     }
 
     /**
      * Delete a book from DataBase by his ID number.
+     *
      * @param id Long type variable to identify the book.
-     * @return True if it can search and delete. False if it can't.
      */
-    public boolean deleteBookById(Long id){
+    public void deleteBookById(Long id){
         if (id != 0 || repository.findById(id).isPresent()){
             repository.deleteById(id);
-            return true;
         }
-        return false;
     }
 
     //Custom methods
 
     /**
-     * Find books by his title.
+     * Search books by his title.
      * @param title String that represent the title of the Book.
      * @return Empty list if it can't find. A List if it can.
      */
@@ -94,7 +90,7 @@ public class BookService {
     }
 
     /**
-     * Find books by his author.
+     * Search books by his author.
      * @param author Author's name of the book.
      * @return Empty list if it can't find. A List if it can.
      */
@@ -106,7 +102,7 @@ public class BookService {
     }
 
     /**
-     * Find and return the books matches with the gender.
+     * Search and return the books matches with the gender.
      * @param gender Gender's name.
      * @return A List of matched with gender if it can find. Empty List if it can't.
      */
@@ -118,7 +114,7 @@ public class BookService {
     }
 
     /**
-     * Find a book with pages quantity by the {min} and {max} values.
+     * Search a book with pages quantity by the {min} and {max} values.
      * @param min Minimum int.
      * @param max Maximum int.
      * @return If values aren't null return a List. If are null (or can't find a book by pages) return an empty list.
@@ -131,7 +127,7 @@ public class BookService {
     }
 
     /**
-     * Find a book with price quantity by the {min} and {max} values.
+     * Search a book with price quantity by the {min} and {max} values.
      * @param min Minimum int.
      * @param max Maximum int.
      * @return If values aren't null return a List. If are null (or can't find a book by price) return an empty list.
@@ -144,7 +140,7 @@ public class BookService {
     }
 
     /**
-     *  Find a book by his author and title.
+     *  Search a book by his author and title.
      * @param title Book's title.
      * @param author Book's author.
      * @return A book's List if author and title matches in DataBase. Else return an empty list.
@@ -157,7 +153,7 @@ public class BookService {
     }
 
     /**
-     *  Find a book by his author and gender (only one gender per query).
+     *  Search a book by his author and gender (only one gender per query).
      * @param title Book's title.
      * @param gender Book's gender
      * @return A book's List if title and gender matches in DataBase. Else return an empty list.
@@ -170,7 +166,7 @@ public class BookService {
     }
 
     /**
-     *  Find a book by his author and gender.
+     *  Search a book by his author and gender.
      * @param author Book's author.
      * @param gender Book's gender.
      * @return A book's List if author and gender matches in DataBase. Else return an empty List.
@@ -183,7 +179,7 @@ public class BookService {
     }
 
     /**
-     *  Find a book by his author and if the book is available in DataBase.
+     *  Search a book by his author and if the book is available in DataBase.
      * @param author Book's author.
      * @return A List of the author's books only if they are available. Else return an empty list.
      */
@@ -195,7 +191,7 @@ public class BookService {
     }
 
     /**
-     *  Find a book by his author and if the book is available in DataBase.
+     *  Search a book by his author and if the book is available in DataBase.
      * @param author Book's author.
      * @return A List of the author's books only if they are available. Else return an empty list.
      */
