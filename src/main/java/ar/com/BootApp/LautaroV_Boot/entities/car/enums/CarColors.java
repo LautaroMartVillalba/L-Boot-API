@@ -1,4 +1,4 @@
-package ar.com.BootApp.LautaroV_Boot.entities.car.carEnums;
+package ar.com.BootApp.LautaroV_Boot.entities.car.enums;
 
 public enum CarColors {
 

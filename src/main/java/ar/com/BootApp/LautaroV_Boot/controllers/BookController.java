@@ -1,8 +1,8 @@
-package ar.com.BootApp.LautaroV_Boot.controller;
+package ar.com.BootApp.LautaroV_Boot.controllers;
 
 import ar.com.BootApp.LautaroV_Boot.entities.book.Book;
 import ar.com.BootApp.LautaroV_Boot.entities.book.BookGenders;
-import ar.com.BootApp.LautaroV_Boot.service.BookService;
+import ar.com.BootApp.LautaroV_Boot.services.BookService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -44,7 +44,7 @@ public class BookController {
         return ResponseEntity.notFound().build();
     }
 
-    @PostMapping("/save/{book}")
+    @PostMapping("/save")
     public HttpStatus savebook(@PathVariable Book book){
         if (service.validateBook(book)) {
             service.saveBook(book);
