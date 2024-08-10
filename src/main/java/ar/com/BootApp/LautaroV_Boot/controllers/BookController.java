@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-//AllArgs make possible the using of BookService without @Autowired
 @AllArgsConstructor
 @RequestMapping("/book")
 public class BookController {
@@ -20,7 +19,7 @@ public class BookController {
     private BookService service;
     /*----------------Default methods---------------*/
     @GetMapping("/all")
-    public List<Book> getAllBooks(Pageable pageable){
+    public List<Book> getAllBooks(){
         return service.findAllBooks();
     }
 
@@ -36,33 +35,31 @@ public class BookController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Book> deleteBook(@PathVariable Long id){
-        Optional<Book> book = service.findByBookID(id);
-        if(book.isPresent()){
-            service.deleteBookById(id);
+        boolean result = service.deleteBookById(id);
+        if (result){
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
     }
 
     @PostMapping("/save")
-    public HttpStatus savebook(@PathVariable Book book){
+    public ResponseEntity<Book> saveBook(@PathVariable Book book){
         if (service.validateBook(book)) {
             service.saveBook(book);
-            return HttpStatus.OK;
+            return ResponseEntity.ok(book);
         }
-        return HttpStatus.PARTIAL_CONTENT;
+        return ResponseEntity.badRequest().build();
 
     }
     /*--------------------------Custom Methods--------------------------*/
 
     @GetMapping("/by-title/{title}")
     public ResponseEntity<List<Book>> getBookByTitle(@PathVariable String title){
-        List<Book> list = service.findByTitle(title);
-        System.out.println(list);
-        if (list.isEmpty()){
+        List<Book> result = service.findByTitle(title);
+        if (result.isEmpty()){
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(list);
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/by-author/{author}")
@@ -92,7 +89,7 @@ public class BookController {
         return ResponseEntity.ok(result);    }
 
     @GetMapping("/price-between/{min}/{max}")
-    public ResponseEntity<List<Book>> getbookByPriceBetween(@PathVariable int min, @PathVariable int max){
+    public ResponseEntity<List<Book>> getBookByPriceBetween(@PathVariable int min, @PathVariable int max){
         List<Book> result = service.findByPriceBetween(min, max);
         if(result.isEmpty()){
             return ResponseEntity.notFound().build();
@@ -101,8 +98,8 @@ public class BookController {
     }
 
     @GetMapping("/title-author/{title}/{author}")
-    public ResponseEntity<List<Book>> findByTitleAndAuthor(@PathVariable String title,@PathVariable String author){
-        List<Book> result = service.findByTitleAndAuthor(title, author);
+    public ResponseEntity<Optional<Book>> findByTitleAndAuthor(@PathVariable String title,@PathVariable String author){
+        Optional<Book> result = service.findByTitleAndAuthor(title, author);
         if(result.isEmpty()){
             return ResponseEntity.notFound().build();
         }

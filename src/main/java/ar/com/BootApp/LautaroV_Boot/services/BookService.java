@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -57,9 +58,16 @@ public class BookService {
      *
      * @param book Book object to be saved.
      */
-    public void saveBook(Book book) {
-        if (book == null) {
-            throw new IllegalArgumentException("You are trying to insert a null book or one that already exists in database.");
+    public void saveBook(Book book){
+        if (!validateBook(book)) {
+            throw new NullPointerException("You're trying to insert a book with null parameters.");
+        }
+        Optional<Book> bookRepo = findByTitleAndAuthor(book.getTitle(), book.getAuthor());
+        if (bookRepo.isPresent()) {
+            Book bookOb = bookRepo.get();
+            if (Objects.equals(book.getTitle(), bookOb.getTitle()) && Objects.equals(book.getAuthor(), bookOb.getAuthor()) && Objects.equals(book.getPublisher(), bookOb.getPublisher())) {
+                throw new RuntimeException("This book already existing in the DataBase.");
+            }
         }
         repository.save(book);
     }
@@ -68,11 +76,15 @@ public class BookService {
      * Delete a book from DataBase by his ID number.
      *
      * @param id Long type variable to identify the book.
+     * @return True if it can delete book. False if it can't.
      */
-    public void deleteBookById(Long id){
-        if (id != 0 || repository.findById(id).isPresent()){
+    public boolean deleteBookById(Long id){
+        Optional<Book> findBook = repository.findById(id);
+        if (findBook.isPresent()){
             repository.deleteById(id);
+            return true;
         }
+        return false;
     }
 
     //Custom methods
@@ -83,7 +95,7 @@ public class BookService {
      * @return Empty list if it can't find. A List if it can.
      */
     public List<Book> findByTitle(String title){
-        if (title != null){
+        if (!Objects.equals(title, "")){
             return repository.findByTitleContaining(title);
         }
         return new ArrayList<Book>();
@@ -95,7 +107,7 @@ public class BookService {
      * @return Empty list if it can't find. A List if it can.
      */
     public List<Book> findByAuthor(String author){
-        if (author != null){
+        if (!Objects.equals(author, "")){
             return repository.findByAuthorContaining(author);
         }
         return new ArrayList<Book>();
@@ -120,7 +132,7 @@ public class BookService {
      * @return If values aren't null return a List. If are null (or can't find a book by pages) return an empty list.
      */
     public List<Book> findByPagesBetween(int min, int max){
-        if (min != 0 && max != 0){
+        if (min > 0 && max > min){
             return repository.findByPagesBetween(min, max);
         }
         return new ArrayList<Book>();
@@ -133,7 +145,7 @@ public class BookService {
      * @return If values aren't null return a List. If are null (or can't find a book by price) return an empty list.
      */
     public List<Book> findByPriceBetween(int min, int max){
-        if(min != 0 && max != 0){
+        if(min > 0 && max > min){
             return repository.findByPriceBetween(min,max);
         }
         return new ArrayList<Book>();
@@ -145,11 +157,11 @@ public class BookService {
      * @param author Book's author.
      * @return A book's List if author and title matches in DataBase. Else return an empty list.
      */
-    public List<Book> findByTitleAndAuthor(String title, String author){
-        if(title != null && author != null){
+    public Optional<Book> findByTitleAndAuthor(String title, String author){
+        if(!Objects.equals(title, "") && !Objects.equals(author,"")){
             return repository.findByTitleContainingAndAuthorContaining(title, author);
         }
-        return new ArrayList<>();
+        return Optional.empty();
     }
 
     /**
@@ -159,7 +171,7 @@ public class BookService {
      * @return A book's List if title and gender matches in DataBase. Else return an empty list.
      */
     public List<Book> findByTitleAndGender(String title, BookGenders gender){
-        if (title != null && gender != null){
+        if (!Objects.equals(title, "") && gender != null){
             return repository.findByTitleContainingAndGender(title, gender);
         }
         return new ArrayList<Book>();
@@ -172,7 +184,7 @@ public class BookService {
      * @return A book's List if author and gender matches in DataBase. Else return an empty List.
      */
     public List<Book> findByAuthorAndGender(String author, BookGenders gender){
-        if (author != null && gender != null){
+        if (!Objects.equals(author, "") && gender != null){
             return repository.findByAuthorContainingAndGender(author, gender);
         }
         return new ArrayList<Book>();
@@ -184,7 +196,7 @@ public class BookService {
      * @return A List of the author's books only if they are available. Else return an empty list.
      */
     public List<Book> findByAuthorAndAvailableTrue(String author){
-        if (author != null){
+        if (!Objects.equals(author, "")){
             return repository.findByAuthorContainingAndAvailableTrue(author);
         }
         return new ArrayList<Book>();
@@ -196,7 +208,7 @@ public class BookService {
      * @return A List of the author's books only if they are available. Else return an empty list.
      */
     public List<Book> findByAuthorAndAvailableFalse(String author){
-        if (author != null){
+        if (!Objects.equals(author, "")){
             return repository.findByAuthorContainingAndAvailableFalse(author);
         }
         return new ArrayList<Book>();

@@ -7,13 +7,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findByTitleContaining(String title);
     List<Book> findByAuthorContaining(String author);
     List<Book> findByGender(BookGenders gender);
-    List<Book> findByTitleContainingAndAuthorContaining(String title, String author);
+    Optional<Book> findByTitleContainingAndAuthorContaining(String title, String author);
     List<Book> findByTitleContainingAndGender(String title, BookGenders gender);
     List<Book> findByAuthorContainingAndGender(String author, BookGenders gender);
     @Query("SELECT b FROM Book b WHERE b.pages >= :min AND b.pages <= :max")

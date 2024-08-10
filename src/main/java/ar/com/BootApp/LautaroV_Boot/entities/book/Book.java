@@ -5,6 +5,7 @@ import lombok.*;
 
 @Entity
 @Table(name = "books")
+@AllArgsConstructor
 @NoArgsConstructor
 @Setter
 @Getter
@@ -29,18 +30,8 @@ public class Book {
     @Column(nullable = false)
     private double price;
     @Column(nullable = false)
+    private String publisher;
+    @Column(nullable = false)
     private boolean available;
-
-
-    public Book(Long id, String title, String author, BookGenders gender, int pages, double price, boolean available) {
-        this.id = id;
-        this.title = title;
-        this.author = author;
-        this.gender = gender;
-        this.pages = pages;
-        this.price = price;
-        this.available = available;
-    }
-
 
 }
