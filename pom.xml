@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>ar.com.BootApp</groupId>
 	<artifactId>LautaroV-Boot</artifactId>
-	<version>0.1.5-SNAPSHOT</version>
+	<version>0.1.7-SNAPSHOT</version>
 	<name>LautaroV-Boot</name>
 	<description>This is a project made by improving my knowledge. In this project I will make some schemas on database (books, tools, cars and cellphones); by a rol system you will (or not) look for the elements in the database, create or delete elements (last two only for admins).</description>
 	<url/>
