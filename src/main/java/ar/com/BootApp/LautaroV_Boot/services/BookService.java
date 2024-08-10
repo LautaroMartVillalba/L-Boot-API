@@ -2,6 +2,9 @@ package ar.com.BootApp.LautaroV_Boot.services;
 
 import ar.com.BootApp.LautaroV_Boot.entities.book.Book;
 import ar.com.BootApp.LautaroV_Boot.entities.book.BookGenders;
+import ar.com.BootApp.LautaroV_Boot.exceptions.book.types.DuplicatedBookException;
+import ar.com.BootApp.LautaroV_Boot.exceptions.book.types.EmptyDataBaseException;
+import ar.com.BootApp.LautaroV_Boot.exceptions.book.types.NullBookException;
 import ar.com.BootApp.LautaroV_Boot.repositories.BookRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -35,8 +38,12 @@ public class BookService {
      *  Search and return all books in the DataBase.
      * @return List
      */
-    public List<Book> findAllBooks(){
-        return repository.findAll();
+    public List<Book> findAllBooks() throws EmptyDataBaseException {
+        List<Book> result = repository.findAll();
+        if (result.isEmpty()){
+            throw new EmptyDataBaseException();
+        }
+        return result;
     }
 
     /**
@@ -58,15 +65,15 @@ public class BookService {
      *
      * @param book Book object to be saved.
      */
-    public void saveBook(Book book){
+    public void saveBook(Book book) throws NullBookException, DuplicatedBookException {
         if (!validateBook(book)) {
-            throw new NullPointerException("You're trying to insert a book with null parameters.");
+            throw new NullBookException();
         }
         Optional<Book> bookRepo = findByTitleAndAuthor(book.getTitle(), book.getAuthor());
         if (bookRepo.isPresent()) {
             Book bookOb = bookRepo.get();
             if (Objects.equals(book.getTitle(), bookOb.getTitle()) && Objects.equals(book.getAuthor(), bookOb.getAuthor()) && Objects.equals(book.getPublisher(), bookOb.getPublisher())) {
-                throw new RuntimeException("This book already existing in the DataBase.");
+                throw new DuplicatedBookException();
             }
         }
         repository.save(book);
