@@ -1,6 +1,11 @@
 package ar.com.BootApp.LautaroV_Boot.services;
 
 import ar.com.BootApp.LautaroV_Boot.entities.tool.Tool;
+import ar.com.BootApp.LautaroV_Boot.exceptions.car.types.DuplicatedCarException;
+import ar.com.BootApp.LautaroV_Boot.exceptions.car.types.EmptyDataBaseException;
+import ar.com.BootApp.LautaroV_Boot.exceptions.tool.types.DuplicatedToolException;
+import ar.com.BootApp.LautaroV_Boot.exceptions.tool.types.NullToolException;
+import ar.com.BootApp.LautaroV_Boot.exceptions.tool.types.ToolEmptyDataBaseException;
 import ar.com.BootApp.LautaroV_Boot.repositories.ToolRepository;
 import lombok.AllArgsConstructor;
 import org.aspectj.weaver.reflect.IReflectionWorld;
@@ -35,10 +40,10 @@ public class ToolService {
      *
      * @return List af all cars in DataBase List if it has some registers.
      */
-    public List<Tool> findAllTools() {
+    public List<Tool> findAllTools() throws ToolEmptyDataBaseException {
         List<Tool> result = repository.findAll();
         if (result.isEmpty()) {
-            throw new RuntimeException();
+            throw new ToolEmptyDataBaseException();
         }
         return result;
     }
@@ -58,13 +63,13 @@ public class ToolService {
      *
      * @param tool Tool Object to persist in DataBase.
      */
-    public void saveTool(Tool tool) {
+    public void saveTool(Tool tool) throws NullToolException, DuplicatedToolException {
         if (!validateTool(tool)) {
-            throw new RuntimeException();
+            throw new NullToolException();
         }
         Optional<Tool> toolRepo = repository.findByCompanyAndNameAndPriceBetween(tool.getCompany(), tool.getName(), tool.getPrice() - 1, tool.getPrice() + 1);
         if (toolRepo.isPresent()) {
-            throw new RuntimeException();
+            throw new DuplicatedToolException();
         }
         repository.save(tool);
     }
@@ -126,4 +131,5 @@ public class ToolService {
         }
         return new ArrayList<>();
     }
+    
 }
