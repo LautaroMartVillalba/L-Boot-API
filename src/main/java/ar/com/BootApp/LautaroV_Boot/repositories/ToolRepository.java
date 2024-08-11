@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ToolRepository extends JpaRepository<Tool, Long> {
@@ -18,5 +19,6 @@ public interface ToolRepository extends JpaRepository<Tool, Long> {
     List<Tool> findByNameAndCompany(String name, String company);
     List<Tool> findByNameAndPriceBetween(String name, double min, double max);
     List<Tool> findByCompanyAndPriceBetween(String company, double min, double max);
+    Optional<Tool> findByCompanyAndNameAndPriceBetween(String company, String name, double min, double max);
 
 }
