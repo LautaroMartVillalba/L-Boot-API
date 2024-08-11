@@ -5,12 +5,10 @@ import lombok.*;
 
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @ToString
-/**
- * This entity represent a Tool in the DataBase
- */
 public class Tool {
 
     @Id
@@ -21,11 +19,4 @@ public class Tool {
     private double price;
     private boolean available;
 
-    public Tool(Long id, String name, String company, double price, boolean available) {
-        this.id = id;
-        this.name = name;
-        this.company = company;
-        this.price = price;
-        this.available = available;
-    }
 }

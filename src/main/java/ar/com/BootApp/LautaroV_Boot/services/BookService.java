@@ -3,7 +3,7 @@ package ar.com.BootApp.LautaroV_Boot.services;
 import ar.com.BootApp.LautaroV_Boot.entities.book.Book;
 import ar.com.BootApp.LautaroV_Boot.entities.book.BookGenders;
 import ar.com.BootApp.LautaroV_Boot.exceptions.book.types.DuplicatedBookException;
-import ar.com.BootApp.LautaroV_Boot.exceptions.book.types.EmptyDataBaseException;
+import ar.com.BootApp.LautaroV_Boot.exceptions.book.types.BookEmptyDataBaseException;
 import ar.com.BootApp.LautaroV_Boot.exceptions.book.types.NullBookException;
 import ar.com.BootApp.LautaroV_Boot.repositories.BookRepository;
 import lombok.AllArgsConstructor;
@@ -38,10 +38,10 @@ public class BookService {
      *  Search and return all books in the DataBase.
      * @return List
      */
-    public List<Book> findAllBooks() throws EmptyDataBaseException {
+    public List<Book> findAllBooks() throws BookEmptyDataBaseException {
         List<Book> result = repository.findAll();
         if (result.isEmpty()){
-            throw new EmptyDataBaseException();
+            throw new BookEmptyDataBaseException();
         }
         return result;
     }

@@ -10,9 +10,6 @@ import lombok.*;
 @Setter
 @Getter
 @ToString
-/**
- * This entity represent a Book in the DataBase
- */
 public class Book {
 
     @Id

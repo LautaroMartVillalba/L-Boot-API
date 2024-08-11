@@ -2,6 +2,9 @@ package ar.com.BootApp.LautaroV_Boot.controllers;
 
 import ar.com.BootApp.LautaroV_Boot.entities.book.Book;
 import ar.com.BootApp.LautaroV_Boot.entities.book.BookGenders;
+import ar.com.BootApp.LautaroV_Boot.exceptions.book.types.DuplicatedBookException;
+import ar.com.BootApp.LautaroV_Boot.exceptions.book.types.BookEmptyDataBaseException;
+import ar.com.BootApp.LautaroV_Boot.exceptions.book.types.NullBookException;
 import ar.com.BootApp.LautaroV_Boot.services.BookService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.*;
@@ -19,7 +22,7 @@ public class BookController {
     private BookService service;
     /*----------------Default methods---------------*/
     @GetMapping("/all")
-    public List<Book> getAllBooks(){
+    public List<Book> getAllBooks() throws BookEmptyDataBaseException {
         return service.findAllBooks();
     }
 
@@ -43,7 +46,7 @@ public class BookController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<Book> saveBook(@PathVariable Book book){
+    public ResponseEntity<Book> saveBook(@PathVariable Book book) throws DuplicatedBookException, NullBookException {
         if (service.validateBook(book)) {
             service.saveBook(book);
             return ResponseEntity.ok(book);
@@ -134,7 +137,7 @@ public class BookController {
     }
 
     @GetMapping("/author-not-available/{author}")
-    public ResponseEntity<List<Book>> fndByAuthorAndAvailableFalse(@PathVariable String author){
+    public ResponseEntity<List<Book>> findByAuthorAndAvailableFalse(@PathVariable String author){
         List<Book> result = service.findByAuthorAndAvailableFalse(author);
         if(result.isEmpty()){
             return ResponseEntity.notFound().build();
