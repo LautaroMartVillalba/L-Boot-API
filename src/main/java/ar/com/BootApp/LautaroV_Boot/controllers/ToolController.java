@@ -113,11 +113,15 @@ public class ToolController {
 
     @PostMapping("/insert")
     public ResponseEntity<Tool> insertTool(@RequestBody Tool tool) throws DuplicatedToolException, NullToolException {
-        return ResponseEntity.ok(service.saveTool(tool));
+        boolean result = service.saveTool(tool);
+        if (!result){
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(tool);
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<Boolean> deleteTool(Long id){
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Boolean> deleteTool(@PathVariable  Long id){
         boolean result = service.deleteToolByID(id);
         if (!result){
             return  ResponseEntity.notFound().build();

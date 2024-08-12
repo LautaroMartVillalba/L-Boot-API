@@ -62,7 +62,7 @@ public class ToolService {
      *
      * @param tool Tool Object to persist in DataBase.
      */
-    public Tool saveTool(Tool tool) throws NullToolException, DuplicatedToolException {
+    public boolean saveTool(Tool tool) throws NullToolException, DuplicatedToolException {
         if (!validateTool(tool)) {
             throw new NullToolException();
         }
@@ -71,7 +71,7 @@ public class ToolService {
             throw new DuplicatedToolException();
         }
         repository.save(tool);
-        return tool;
+        return true;
     }
 
     /**
