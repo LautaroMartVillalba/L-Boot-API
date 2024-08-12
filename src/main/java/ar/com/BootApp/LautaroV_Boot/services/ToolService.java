@@ -1,14 +1,12 @@
 package ar.com.BootApp.LautaroV_Boot.services;
 
 import ar.com.BootApp.LautaroV_Boot.entities.tool.Tool;
-import ar.com.BootApp.LautaroV_Boot.exceptions.car.types.DuplicatedCarException;
-import ar.com.BootApp.LautaroV_Boot.exceptions.car.types.EmptyDataBaseException;
 import ar.com.BootApp.LautaroV_Boot.exceptions.tool.types.DuplicatedToolException;
 import ar.com.BootApp.LautaroV_Boot.exceptions.tool.types.NullToolException;
 import ar.com.BootApp.LautaroV_Boot.exceptions.tool.types.ToolEmptyDataBaseException;
 import ar.com.BootApp.LautaroV_Boot.repositories.ToolRepository;
 import lombok.AllArgsConstructor;
-import org.aspectj.weaver.reflect.IReflectionWorld;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +14,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @AllArgsConstructor
+@Service
 public class ToolService {
 
     ToolRepository repository;
@@ -63,7 +62,7 @@ public class ToolService {
      *
      * @param tool Tool Object to persist in DataBase.
      */
-    public void saveTool(Tool tool) throws NullToolException, DuplicatedToolException {
+    public Tool saveTool(Tool tool) throws NullToolException, DuplicatedToolException {
         if (!validateTool(tool)) {
             throw new NullToolException();
         }
@@ -72,6 +71,7 @@ public class ToolService {
             throw new DuplicatedToolException();
         }
         repository.save(tool);
+        return tool;
     }
 
     /**
@@ -90,16 +90,16 @@ public class ToolService {
     }
     /*-------------------Custom Methods-------------------*/
 
-    public List<Tool> findCarByName(String name) {
+    public List<Tool> findToolByName(String name) {
         if (!Objects.equals(name, "")) {
-            return repository.findByName(name);
+            return repository.findByNameContaining(name);
         }
         return new ArrayList<>();
     }
 
     public List<Tool> findByCompany(String company) {
         if (!Objects.equals(company, "")) {
-            return repository.findByCompany(company);
+            return repository.findByCompanyContaining(company);
         }
         return new ArrayList<>();
     }
@@ -113,21 +113,21 @@ public class ToolService {
 
     public List<Tool> findToolByNameAndCompany(String name, String company) {
         if (!Objects.equals(name, "") && !Objects.equals(company, "")) {
-            return repository.findByNameAndCompany(name, company);
+            return repository.findByNameContainingAndCompanyContaining(name, company);
         }
         return new ArrayList<>();
     }
 
     public List<Tool> findToolByNameAndPrice(String name, double min, double max) {
         if (!Objects.equals(name, "") && min > 0 && max > min) {
-            return repository.findByNameAndPriceBetween(name, min, max);
+            return repository.findByNameContainingAndPriceBetween(name, min, max);
         }
         return new ArrayList<>();
     }
 
     public List<Tool> findToolByCompanyAndPrice(String company, double min, double max) {
         if (!Objects.equals(company, "") || min <= 0 || max < min) {
-            return repository.findByCompanyAndPriceBetween(company, min, max);
+            return repository.findByCompanyContainingAndPriceBetween(company, min, max);
         }
         return new ArrayList<>();
     }

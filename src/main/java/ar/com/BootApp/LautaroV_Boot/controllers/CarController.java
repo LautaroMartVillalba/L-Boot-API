@@ -25,7 +25,6 @@ public class CarController {
     @GetMapping("/all")
     public ResponseEntity<List<Car>> findAll() throws EmptyDataBaseException {
         List<Car> list = service.findAllCars();
-
         if (list.isEmpty()){
             return ResponseEntity.notFound().build();
         }

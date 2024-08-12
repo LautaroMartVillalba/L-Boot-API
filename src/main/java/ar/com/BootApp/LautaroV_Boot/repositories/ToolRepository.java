@@ -11,14 +11,14 @@ import java.util.Optional;
 @Repository
 public interface ToolRepository extends JpaRepository<Tool, Long> {
 
-    List<Tool> findByName(String name);
-    List<Tool> findByCompany(String company);
+    List<Tool> findByNameContaining(String name);
+    List<Tool> findByCompanyContaining(String company);
     List<Tool> findByPriceBetween(double min, double max);
     List<Tool> findByAvailableTrue();
     List<Tool> findByAvailableFalse();
-    List<Tool> findByNameAndCompany(String name, String company);
-    List<Tool> findByNameAndPriceBetween(String name, double min, double max);
-    List<Tool> findByCompanyAndPriceBetween(String company, double min, double max);
+    List<Tool> findByNameContainingAndCompanyContaining(String name, String company);
+    List<Tool> findByNameContainingAndPriceBetween(String name, double min, double max);
+    List<Tool> findByCompanyContainingAndPriceBetween(String company, double min, double max);
     Optional<Tool> findByCompanyAndNameAndPriceBetween(String company, String name, double min, double max);
 
 }
