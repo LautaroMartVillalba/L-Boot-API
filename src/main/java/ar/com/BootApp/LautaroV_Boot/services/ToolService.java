@@ -35,9 +35,9 @@ public class ToolService {
     /*--------------Default Methods--------------*/
 
     /**
-     * Search and return a List of all cars in DataBase.
+     * Search and return a List of all tools in DataBase.
      *
-     * @return List af all cars in DataBase List if it has some registers.
+     * @return List af all tools in DataBase List if it has some registers.
      */
     public List<Tool> findAllTools() throws ToolEmptyDataBaseException {
         List<Tool> result = repository.findAll();
