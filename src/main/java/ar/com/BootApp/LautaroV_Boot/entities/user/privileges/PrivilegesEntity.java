@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
+@Table(name = "entity_privileges")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

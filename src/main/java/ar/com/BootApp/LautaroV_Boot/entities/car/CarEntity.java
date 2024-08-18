@@ -6,12 +6,13 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
+@Table(name = "entity_cars")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-public class Car {
+public class CarEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

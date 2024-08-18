@@ -13,7 +13,7 @@ import java.util.Set;
 @Setter
 @ToString
 @Builder
-@Table(name = "db_roles")
+@Table(name = "entity_roles")
 public class RoleEntity {
 
     @Id

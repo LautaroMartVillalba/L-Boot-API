@@ -4,12 +4,13 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
+@Table(name = "entity_tools")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @ToString
-public class Tool {
+public class ToolEntiy {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

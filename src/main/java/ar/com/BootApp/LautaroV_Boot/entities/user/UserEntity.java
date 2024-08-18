@@ -13,7 +13,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Builder
-@Table(name = "db-user")
+@Table(name = "entity-user")
 public class UserEntity {
 
     @Id
