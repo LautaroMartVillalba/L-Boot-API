@@ -1,12 +1,18 @@
 package ar.com.BootApp.LautaroV_Boot;
 
 import ar.com.BootApp.LautaroV_Boot.entities.tool.Tool;
+import ar.com.BootApp.LautaroV_Boot.entities.user.role.RoleEntity;
+import ar.com.BootApp.LautaroV_Boot.entities.user.role.RoleEnum;
+import ar.com.BootApp.LautaroV_Boot.entities.user.UserEntity;
 import ar.com.BootApp.LautaroV_Boot.repositories.BookRepository;
 import ar.com.BootApp.LautaroV_Boot.repositories.CarRepository;
 import ar.com.BootApp.LautaroV_Boot.repositories.ToolRepository;
+import ar.com.BootApp.LautaroV_Boot.repositories.UserRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+
+import java.util.Set;
 
 
 @SpringBootApplication
@@ -18,6 +24,7 @@ public class LautaroVBootApplication {
 		BookRepository bookRepo = context.getBean(BookRepository.class);
 		CarRepository carRepo = context.getBean(CarRepository.class);
 		ToolRepository toolRepo = context.getBean(ToolRepository.class);
+		UserRepository userRepo = context.getBean(UserRepository.class);
 //
 //		for (int i = 1; i < 50; i++){
 //			if(i <=10){
@@ -81,5 +88,19 @@ public class LautaroVBootApplication {
 				toolRepo.save(tool);
 			}
 		}
+
+		RoleEntity roleReader = RoleEntity.builder().roleName(RoleEnum.READER).build();
+
+		UserEntity reader = UserEntity.builder()
+							.name("Reader One")
+							.email("Reader@mail.com")
+							.password("asd123")
+							.role(Set.of(roleReader))
+							.accountNoExpired(true)
+							.accountNoLocked(true)
+							.credentialsNoExpired(true)
+							.isEnabled(true).build();
+
+		userRepo.save(reader);
 	}
 }
