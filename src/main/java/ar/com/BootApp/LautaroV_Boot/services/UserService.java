@@ -1,22 +1,32 @@
 package ar.com.BootApp.LautaroV_Boot.services;
 
+import ar.com.BootApp.LautaroV_Boot.entities.user.UserDTO;
 import ar.com.BootApp.LautaroV_Boot.entities.user.UserEntity;
 import ar.com.BootApp.LautaroV_Boot.entities.user.role.RoleEnum;
 import ar.com.BootApp.LautaroV_Boot.repositories.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+
+import java.util.*;
 
 @AllArgsConstructor
 @Service
 public class UserService {
 
+    @Autowired
+    private PasswordEncoder encoder;
+
     private UserRepository repository;
 
-    boolean validateUser(UserEntity user){
+    public boolean validateUser(UserEntity user){
+        if (!Objects.equals(user.getEmail(), "") || !Objects.equals(user.getName(), "") || !Objects.equals(user.getRole(), null)){
+            return true;
+        }
+        return false;
+    }
+    public boolean validateUser(UserDTO user){
         if (!Objects.equals(user.getEmail(), "") || !Objects.equals(user.getName(), "") || !Objects.equals(user.getRole(), null)){
             return true;
         }
@@ -57,11 +67,23 @@ public class UserService {
         if (!validateUser(user)) {
             throw new RuntimeException("Not valid user.");
         }
-        Optional<UserEntity> userRepo = repository.findByEmail(user.getEmail());
+        Optional<UserEntity> userRepo = repository.findUserEntityByEmail(user.getEmail());
         if (userRepo.isPresent()) {
             throw new RuntimeException("User already exist.");
         }
-        repository.save(user);
+
+        UserEntity userSave = UserEntity.builder()
+                .name(user.getName())
+                .email(user.getEmail())
+                .password(encoder.encode(user.getPassword()))
+                .credentialsNoExpired(true)
+                .isEnabled(true)
+                .accountNoLocked(true)
+                .accountNoExpired(true)
+                .role(user.getRole())
+                .build();
+
+        repository.save(userSave);
         return true;
     }
 
@@ -84,7 +106,7 @@ public class UserService {
 
     public Optional<UserEntity> findUserByEmail(String email){
         if (!Objects.equals(email, "") && email.contains("@gmail.com") || email.contains("@hotmail.com")){
-            return repository.findByEmail(email);
+            return repository.findUserEntityByEmail(email);
         }
         return Optional.empty();
     }

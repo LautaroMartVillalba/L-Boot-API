@@ -9,6 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @Setter
 @Getter
+@Builder
 @ToString
 public class BookEntity {
 

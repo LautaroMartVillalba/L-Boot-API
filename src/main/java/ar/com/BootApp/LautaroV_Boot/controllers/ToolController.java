@@ -1,6 +1,6 @@
 package ar.com.BootApp.LautaroV_Boot.controllers;
 
-import ar.com.BootApp.LautaroV_Boot.entities.tool.Tool;
+import ar.com.BootApp.LautaroV_Boot.entities.tool.ToolEntiy;
 import ar.com.BootApp.LautaroV_Boot.exceptions.tool.types.DuplicatedToolException;
 import ar.com.BootApp.LautaroV_Boot.exceptions.tool.types.NullToolException;
 import ar.com.BootApp.LautaroV_Boot.exceptions.tool.types.ToolEmptyDataBaseException;
@@ -8,6 +8,7 @@ import ar.com.BootApp.LautaroV_Boot.repositories.ToolRepository;
 import ar.com.BootApp.LautaroV_Boot.services.ToolService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,8 +23,8 @@ public class ToolController {
     private ToolRepository repository;
 
     @GetMapping("/all")
-    public ResponseEntity<List<Tool>> getAllTools() throws ToolEmptyDataBaseException {
-        List<Tool> result = service.findAllTools();
+    public ResponseEntity<List<ToolEntiy>> getAllTools() throws ToolEmptyDataBaseException {
+        List<ToolEntiy> result = service.findAllTools();
         if (result.isEmpty()){
             return ResponseEntity.notFound().build();
         }
@@ -31,8 +32,8 @@ public class ToolController {
     }
 
     @GetMapping("/by-id/{id}")
-    public ResponseEntity<Optional<Tool>> getById(@PathVariable Long id){
-        Optional<Tool> result = service.findByToolID(id);
+    public ResponseEntity<Optional<ToolEntiy>> getById(@PathVariable Long id){
+        Optional<ToolEntiy> result = service.findByToolID(id);
         if (result.isEmpty()){
             return ResponseEntity.notFound().build();
         }
@@ -40,8 +41,8 @@ public class ToolController {
     }
 
     @GetMapping("/by-name/{name}")
-    public ResponseEntity<List<Tool>> findByName(@PathVariable String name){
-        List<Tool> result = service.findToolByName(name);
+    public ResponseEntity<List<ToolEntiy>> findByName(@PathVariable String name){
+        List<ToolEntiy> result = service.findToolByName(name);
         if (result.isEmpty()){
             return ResponseEntity.notFound().build();
         }
@@ -49,8 +50,8 @@ public class ToolController {
     }
 
     @GetMapping("/by-company/{companyName}")
-    public ResponseEntity<List<Tool>> findByCompany(@PathVariable String companyName){
-        List<Tool> result = service.findByCompany(companyName);
+    public ResponseEntity<List<ToolEntiy>> findByCompany(@PathVariable String companyName){
+        List<ToolEntiy> result = service.findByCompany(companyName);
         if (result.isEmpty()){
             return ResponseEntity.notFound().build();
         }
@@ -58,8 +59,8 @@ public class ToolController {
     }
 
     @GetMapping("/by-price/{min}/{max}")
-    public ResponseEntity<List<Tool>> findByPrice(@PathVariable double min, @PathVariable double max){
-        List<Tool> result = service.findToolByPriceBetween(min, max);
+    public ResponseEntity<List<ToolEntiy>> findByPrice(@PathVariable double min, @PathVariable double max){
+        List<ToolEntiy> result = service.findToolByPriceBetween(min, max);
         if (result.isEmpty()){
             return ResponseEntity.notFound().build();
         }
@@ -67,8 +68,8 @@ public class ToolController {
     }
 
     @GetMapping("/by-name&company/{name}/{companyName}")
-    public ResponseEntity<List<Tool>> findByNameAndCompany(@PathVariable String name,@PathVariable String companyName){
-        List<Tool> result = service.findToolByNameAndCompany(name, companyName);
+    public ResponseEntity<List<ToolEntiy>> findByNameAndCompany(@PathVariable String name,@PathVariable String companyName){
+        List<ToolEntiy> result = service.findToolByNameAndCompany(name, companyName);
         if (result.isEmpty()){
             return ResponseEntity.notFound().build();
         }
@@ -76,8 +77,8 @@ public class ToolController {
     }
 
     @GetMapping("/by-name&price/{name}/{min}/{max}")
-    public ResponseEntity<List<Tool>> findByNameAndPrice(@PathVariable String name, @PathVariable double min, @PathVariable double max){
-        List<Tool> result = service.findToolByNameAndPrice(name, min,max);
+    public ResponseEntity<List<ToolEntiy>> findByNameAndPrice(@PathVariable String name, @PathVariable double min, @PathVariable double max){
+        List<ToolEntiy> result = service.findToolByNameAndPrice(name, min,max);
         if(result.isEmpty()){
             return ResponseEntity.notFound().build();
         }
@@ -85,8 +86,8 @@ public class ToolController {
     }
 
     @GetMapping("/by-company&price/{company}/{min}/{max}")
-    public ResponseEntity<List<Tool>> findByCompanyAndPrince(@PathVariable String company, @PathVariable double min, @PathVariable double max){
-        List<Tool> result = service.findToolByCompanyAndPrice(company, min, max);
+    public ResponseEntity<List<ToolEntiy>> findByCompanyAndPrince(@PathVariable String company, @PathVariable double min, @PathVariable double max){
+        List<ToolEntiy> result = service.findToolByCompanyAndPrice(company, min, max);
         if (result.isEmpty()){
             return ResponseEntity.notFound().build();
         }
@@ -94,8 +95,8 @@ public class ToolController {
     }
 
     @GetMapping("/by-availableTrue")
-    public ResponseEntity<List<Tool>> findByAvailableTrue(){
-        List<Tool> result = repository.findByAvailableTrue();
+    public ResponseEntity<List<ToolEntiy>> findByAvailableTrue(){
+        List<ToolEntiy> result = repository.findByAvailableTrue();
         if (result.isEmpty()){
             return ResponseEntity.notFound().build();
         }
@@ -103,8 +104,8 @@ public class ToolController {
     }
 
     @GetMapping("/by-availableFalse")
-    public ResponseEntity<List<Tool>> findByAvailableFalse(){
-        List<Tool> result = repository.findByAvailableFalse();
+    public ResponseEntity<List<ToolEntiy>> findByAvailableFalse(){
+        List<ToolEntiy> result = repository.findByAvailableFalse();
         if (result.isEmpty()){
             return ResponseEntity.notFound().build();
         }
@@ -112,7 +113,7 @@ public class ToolController {
     }
 
     @PostMapping("/insert")
-    public ResponseEntity<Tool> insertTool(@RequestBody Tool tool) throws DuplicatedToolException, NullToolException {
+    public ResponseEntity<ToolEntiy> insertTool(@RequestBody ToolEntiy tool) throws DuplicatedToolException, NullToolException {
         boolean result = service.saveTool(tool);
         if (!result){
             return ResponseEntity.badRequest().build();

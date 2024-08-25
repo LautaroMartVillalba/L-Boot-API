@@ -1,106 +1,157 @@
 package ar.com.BootApp.LautaroV_Boot;
 
-import ar.com.BootApp.LautaroV_Boot.entities.tool.Tool;
+import ar.com.BootApp.LautaroV_Boot.entities.book.BookEntity;
+import ar.com.BootApp.LautaroV_Boot.entities.book.BookGenders;
+import ar.com.BootApp.LautaroV_Boot.entities.car.CarEntity;
+import ar.com.BootApp.LautaroV_Boot.entities.car.enums.CarColors;
+import ar.com.BootApp.LautaroV_Boot.entities.car.enums.CarCompany;
+import ar.com.BootApp.LautaroV_Boot.entities.tool.ToolEntiy;
+import ar.com.BootApp.LautaroV_Boot.entities.user.privileges.PrivilegesEntity;
+import ar.com.BootApp.LautaroV_Boot.entities.user.privileges.PrivilegesEnum;
 import ar.com.BootApp.LautaroV_Boot.entities.user.role.RoleEntity;
 import ar.com.BootApp.LautaroV_Boot.entities.user.role.RoleEnum;
 import ar.com.BootApp.LautaroV_Boot.entities.user.UserEntity;
-import ar.com.BootApp.LautaroV_Boot.repositories.BookRepository;
-import ar.com.BootApp.LautaroV_Boot.repositories.CarRepository;
-import ar.com.BootApp.LautaroV_Boot.repositories.ToolRepository;
-import ar.com.BootApp.LautaroV_Boot.repositories.UserRepository;
+import ar.com.BootApp.LautaroV_Boot.repositories.*;
+import ar.com.BootApp.LautaroV_Boot.services.BookService;
+import ar.com.BootApp.LautaroV_Boot.services.CarService;
+import ar.com.BootApp.LautaroV_Boot.services.ToolService;
+import ar.com.BootApp.LautaroV_Boot.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.List;
 import java.util.Set;
 
 
 @SpringBootApplication
 public class LautaroVBootApplication {
 
+	@Autowired
+	PasswordEncoder encoder;
+	@Autowired
+	UserService repository;
+	@Autowired
+	BookService bookService;
+	@Autowired
+	CarService carService;
+	@Autowired
+	ToolService toolService;
+	@Autowired
+	PrivilegesEntityRepository privilegesRepo;
+	@Autowired
+	RoleEntityRepository roleRepo;
+
 	public static void main(String[] args) {
 		ApplicationContext context = SpringApplication.run(LautaroVBootApplication.class, args);
+	}
 
-		BookRepository bookRepo = context.getBean(BookRepository.class);
-		CarRepository carRepo = context.getBean(CarRepository.class);
-		ToolRepository toolRepo = context.getBean(ToolRepository.class);
-		UserRepository userRepo = context.getBean(UserRepository.class);
-//
-//		for (int i = 1; i < 50; i++){
-//			if(i <=10){
-//				Book book = new Book((long)i, "Castle Of Thrones", "Mahito", BookGenders.FANTASY, 850, 890, "HinokamiKagura", true);
-//				bookRepo.save(book);
-//			}
-//			if(i > 10 && i <=25){
-//				Book book = new Book((long)i, "Master Of Puppets", "Rim Okumura", BookGenders.HISTORY, 320, 500, "Heracles", false);
-//				bookRepo.save(book);
-//			}
-//			if(i > 25 && i <=37){
-//				Book book = new Book((long)i, "Life In Forest", "Inosuke", BookGenders.SCIENCE, 450, 670, "Epicuro", true);
-//				bookRepo.save(book);
-//			}
-//			if(i > 37){
-//				Book book = new Book((long)i, "Titans Of Horizont", "Eren Jaeger", BookGenders.SCIENCE, 1350, 2030, "Maho", true);
-//				bookRepo.save(book);
-//			}
-//		}
+	@Bean
+	CommandLineRunner init(){
+		return this::run;
+	}
 
-//		for (int i = 1; i < 53; i++){
-//			if(i <=10){
-//				Car car = new Car((long)i, "XZR-Torino", CarCompany.FORD, CarColors.BLACK, 4, 900000.00, false);
-//				carRepo.save(car);
-//			}
-//			if(i > 10 && i <=25){
-//				Car car = new Car((long)i, "XZR-Torino", CarCompany.FORD, CarColors.RED, 4, 800000.00, false);
-//				carRepo.save(car);
-//			}
-//			if(i > 25 && i <=37) {
-//				Car car = new Car((long)i, "Mahito-Course", CarCompany.FERRARI, CarColors.DARKBLUE, 2, 15000000.00, false);
-//				carRepo.save(car);
-//			}
-//			if(i > 37 && i <50){
-//				Car car = new Car((long)i, "Mars Maven", CarCompany.TESLA, CarColors.BLACK, 4, 8050000.00, false);
-//				carRepo.save(car);
-//			}if(i == 51){
-//				Car car = new Car((long)i, "Over Tear", CarCompany.TESLA, CarColors.BLACK, 4, 8050000.00, false);
-//				carRepo.save(car);
-//			}if(i == 52){
-//				Car car = new Car((long)i, "Super Tear", CarCompany.TESLA, CarColors.BLACK, 4, 8050000.00, true);
-//				carRepo.save(car);
-//			}
-//		}
-//	}
-		for (int i = 1; i < 50; i++) {
-			if (i <= 10) {
-				Tool tool = new Tool((long) i, "Hammer", "Stalin", 250, true);
-				toolRepo.save(tool);
-			}
-			if (i > 10 && i <= 25) {
-				Tool tool = new Tool((long) i, "Saw", "Gradle", 710, true);
-				toolRepo.save(tool);
-			}
-			if (i > 25 && i <= 37) {
-				Tool tool = new Tool((long) i, "Screwdriver", "Stalin", 350, false);
-				toolRepo.save(tool);
-			}
-			if (i > 37) {
-				Tool tool = new Tool((long) i, "Tool Box", "Jakarta", 1200, true);
-				toolRepo.save(tool);
-			}
-		}
+	private void run(String... args) {
+		/*Privileges to roles*/
+		PrivilegesEntity get = PrivilegesEntity.builder().name(PrivilegesEnum.GET).build();
+		PrivilegesEntity delete = PrivilegesEntity.builder().name(PrivilegesEnum.DELETE).build();
+		PrivilegesEntity head = PrivilegesEntity.builder().name(PrivilegesEnum.HEAD).build();
+		PrivilegesEntity post = PrivilegesEntity.builder().name(PrivilegesEnum.POST).build();
+		PrivilegesEntity put = PrivilegesEntity.builder().name(PrivilegesEnum.PUT).build();
+		PrivilegesEntity patch = PrivilegesEntity.builder().name(PrivilegesEnum.PATCH).build();
+		PrivilegesEntity option = PrivilegesEntity.builder().name(PrivilegesEnum.OPTIONS).build();
 
-		RoleEntity roleReader = RoleEntity.builder().roleName(RoleEnum.READER).build();
+		privilegesRepo.saveAll(List.of(get, delete, head, post, put, patch, option));
+
+		/*Roles to users*/
+		RoleEntity roleDeveloper = RoleEntity.builder().roleName(RoleEnum.DEVELOPER).privileges(Set.of(
+				get, delete, head, post, put, patch, option)).build();
+		RoleEntity roleAdmin = RoleEntity.builder().roleName(RoleEnum.ADMIN).privileges(Set.of(
+				get, delete, post, put, patch, option)).build();
+		RoleEntity roleReader = RoleEntity.builder().roleName(RoleEnum.READER).privileges(Set.of(
+				get, post, delete, patch)).build();
+		RoleEntity roleDriver = RoleEntity.builder().roleName(RoleEnum.DRIVER).privileges(Set.of(
+				get, post, delete, patch)).build();
+		RoleEntity roleMechanic = RoleEntity.builder().roleName(RoleEnum.MECHANIC).privileges(Set.of(
+				get, post, delete, patch)).build();
+
+		roleRepo.saveAll(Set.of(roleDeveloper, roleAdmin, roleReader, roleDriver, roleMechanic));
+
+		/*Persist users*/
+		UserEntity admin = UserEntity.builder()
+				.name("Administrator")
+				.email("admin@gmail.com")
+				.password(encoder.encode("admin"))
+				.role(Set.of(roleAdmin))
+				.accountNoExpired(true)
+				.credentialsNoExpired(true)
+				.accountNoLocked(true)
+				.isEnabled(true).build();
 
 		UserEntity reader = UserEntity.builder()
-							.name("Reader One")
-							.email("Reader@mail.com")
-							.password("asd123")
-							.role(Set.of(roleReader))
-							.accountNoExpired(true)
-							.accountNoLocked(true)
-							.credentialsNoExpired(true)
-							.isEnabled(true).build();
+				.name("Reader")
+				.email("reader@gmail.com")
+				.password(encoder.encode("reader"))
+				.role(Set.of(roleReader))
+				.accountNoExpired(true)
+				.credentialsNoExpired(true)
+				.accountNoLocked(true)
+				.isEnabled(true).build();
 
-		userRepo.save(reader);
+		UserEntity driver = UserEntity.builder()
+				.name("Driver")
+				.email("driver@gmail.com")
+				.password(encoder.encode("driver"))
+				.role(Set.of(roleDriver))
+				.accountNoExpired(true)
+				.credentialsNoExpired(true)
+				.accountNoLocked(true)
+				.isEnabled(true).build();
+
+		UserEntity mechanic = UserEntity.builder()
+				.name("Mechanic")
+				.email("mechanic@gmail.com")
+				.password(encoder.encode("mechanic"))
+				.role(Set.of(roleMechanic))
+				.accountNoExpired(true)
+				.credentialsNoExpired(true)
+				.accountNoLocked(true)
+				.isEnabled(true).build();
+
+		UserEntity developer = UserEntity.builder()
+				.name("Developer")
+				.email("developer@gmail.com")
+				.password(encoder.encode("developer"))
+				.role(Set.of(roleDeveloper))
+				.accountNoExpired(true)
+				.credentialsNoExpired(true)
+				.accountNoLocked(true)
+				.isEnabled(true).build();
+
+		UserEntity developer2 = UserEntity.builder()
+				.name("Developer")
+				.email("developer2@gmail.com")
+				.password(encoder.encode("developer"))
+				.role(Set.of(roleDeveloper))
+				.accountNoExpired(true)
+				.credentialsNoExpired(true)
+				.accountNoLocked(true)
+				.isEnabled(true).build();
+
+		repository.saveUser(admin);
+		repository.saveUser(reader);
+		repository.saveUser(mechanic);
+		repository.saveUser(driver);
+		repository.saveUser(developer);
+		repository.saveUser(developer2);
+
+		/*Books*/
+
+//			BookEntity bookOne = BookEntity
+
 	}
 }

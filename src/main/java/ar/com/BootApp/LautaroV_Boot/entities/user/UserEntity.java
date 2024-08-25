@@ -3,8 +3,8 @@ package ar.com.BootApp.LautaroV_Boot.entities.user;
 import ar.com.BootApp.LautaroV_Boot.entities.user.role.RoleEntity;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.Cascade;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -29,12 +29,11 @@ public class UserEntity {
     @Column(nullable = false)
     private String password;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "RS_users-roles",
             joinColumns = @JoinColumn(name = "userID"),
             inverseJoinColumns = @JoinColumn(name = "roleID"))
-    @Cascade(org.hibernate.annotations.CascadeType.PERSIST)
-    private Set<RoleEntity> role; //Employing a Set interface ensures that there are no repeated roles.
+    private Set<RoleEntity> role = new HashSet<>(); //Employing a Set interface ensures that there are no repeated roles.
 
     private boolean isEnabled;
     private boolean accountNoExpired;

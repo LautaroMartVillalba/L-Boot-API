@@ -24,7 +24,7 @@ public class RoleEntity {
     @Column(name = "role_name")
     private RoleEnum roleName;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "RS_roles_privileges",
             joinColumns = @JoinColumn(name ="roleID"),
             inverseJoinColumns = @JoinColumn(name = "privilegeID"))

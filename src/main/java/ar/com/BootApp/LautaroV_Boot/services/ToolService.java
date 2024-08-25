@@ -1,6 +1,6 @@
 package ar.com.BootApp.LautaroV_Boot.services;
 
-import ar.com.BootApp.LautaroV_Boot.entities.tool.Tool;
+import ar.com.BootApp.LautaroV_Boot.entities.tool.ToolEntiy;
 import ar.com.BootApp.LautaroV_Boot.exceptions.tool.types.DuplicatedToolException;
 import ar.com.BootApp.LautaroV_Boot.exceptions.tool.types.NullToolException;
 import ar.com.BootApp.LautaroV_Boot.exceptions.tool.types.ToolEmptyDataBaseException;
@@ -25,7 +25,7 @@ public class ToolService {
      * @param tool Tool object.
      * @return False if any parameter of 'tool' was null. True if all is correct.
      */
-    private boolean validateTool(Tool tool) {
+    private boolean validateTool(ToolEntiy tool) {
         if (Objects.equals(tool.getCompany(), "") || Objects.equals(tool.getName(), "") || tool.getPrice() <= 0) {
             return false;
         }
@@ -39,8 +39,8 @@ public class ToolService {
      *
      * @return List af all tools in DataBase List if it has some registers.
      */
-    public List<Tool> findAllTools() throws ToolEmptyDataBaseException {
-        List<Tool> result = repository.findAll();
+    public List<ToolEntiy> findAllTools() throws ToolEmptyDataBaseException {
+        List<ToolEntiy> result = repository.findAll();
         if (result.isEmpty()) {
             throw new ToolEmptyDataBaseException();
         }
@@ -53,7 +53,7 @@ public class ToolService {
      * @param id Tool's identification.
      * @return Optional of tool if it can find a register. Optional.Empty if it can't.
      */
-    public Optional<Tool> findByToolID(Long id) {
+    public Optional<ToolEntiy> findByToolID(Long id) {
         return repository.findById(id);
     }
 
@@ -62,11 +62,11 @@ public class ToolService {
      *
      * @param tool Tool Object to persist in DataBase.
      */
-    public boolean saveTool(Tool tool) throws NullToolException, DuplicatedToolException {
+    public boolean saveTool(ToolEntiy tool) throws NullToolException, DuplicatedToolException {
         if (!validateTool(tool)) {
             throw new NullToolException();
         }
-        Optional<Tool> toolRepo = repository.findByCompanyAndNameAndPriceBetween(tool.getCompany(), tool.getName(), tool.getPrice() - 1, tool.getPrice() + 1);
+        Optional<ToolEntiy> toolRepo = repository.findByCompanyAndNameAndPriceBetween(tool.getCompany(), tool.getName(), tool.getPrice() - 1, tool.getPrice() + 1);
         if (toolRepo.isPresent()) {
             throw new DuplicatedToolException();
         }
@@ -81,7 +81,7 @@ public class ToolService {
      * @return False if it can't find a tool's id witch matches in DataBase. True if it can find and delete.
      */
     public boolean deleteToolByID(Long id) {
-        Optional<Tool> toolFind = repository.findById(id);
+        Optional<ToolEntiy> toolFind = repository.findById(id);
         if (toolFind.isPresent()) {
             repository.deleteById(id);
             return true;
@@ -90,42 +90,42 @@ public class ToolService {
     }
     /*-------------------Custom Methods-------------------*/
 
-    public List<Tool> findToolByName(String name) {
+    public List<ToolEntiy> findToolByName(String name) {
         if (!Objects.equals(name, "")) {
             return repository.findByNameContaining(name);
         }
         return new ArrayList<>();
     }
 
-    public List<Tool> findByCompany(String company) {
+    public List<ToolEntiy> findByCompany(String company) {
         if (!Objects.equals(company, "")) {
             return repository.findByCompanyContaining(company);
         }
         return new ArrayList<>();
     }
 
-    public List<Tool> findToolByPriceBetween(double min, double max) {
+    public List<ToolEntiy> findToolByPriceBetween(double min, double max) {
         if (min > 0 && max > min) {
             return repository.findByPriceBetween(min, max);
         }
         return new ArrayList<>();
     }
 
-    public List<Tool> findToolByNameAndCompany(String name, String company) {
+    public List<ToolEntiy> findToolByNameAndCompany(String name, String company) {
         if (!Objects.equals(name, "") && !Objects.equals(company, "")) {
             return repository.findByNameContainingAndCompanyContaining(name, company);
         }
         return new ArrayList<>();
     }
 
-    public List<Tool> findToolByNameAndPrice(String name, double min, double max) {
+    public List<ToolEntiy> findToolByNameAndPrice(String name, double min, double max) {
         if (!Objects.equals(name, "") && min > 0 && max > min) {
             return repository.findByNameContainingAndPriceBetween(name, min, max);
         }
         return new ArrayList<>();
     }
 
-    public List<Tool> findToolByCompanyAndPrice(String company, double min, double max) {
+    public List<ToolEntiy> findToolByCompanyAndPrice(String company, double min, double max) {
         if (!Objects.equals(company, "") || min <= 0 || max < min) {
             return repository.findByCompanyContainingAndPriceBetween(company, min, max);
         }

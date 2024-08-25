@@ -1,6 +1,6 @@
 package ar.com.BootApp.LautaroV_Boot.services;
 
-import ar.com.BootApp.LautaroV_Boot.entities.car.Car;
+import ar.com.BootApp.LautaroV_Boot.entities.car.CarEntity;
 import ar.com.BootApp.LautaroV_Boot.entities.car.enums.CarColors;
 import ar.com.BootApp.LautaroV_Boot.entities.car.enums.CarCompany;
 import ar.com.BootApp.LautaroV_Boot.exceptions.car.types.DuplicatedCarException;
@@ -26,7 +26,7 @@ public class CarService {
      * @param car Car object.
      * @return False if any parameter of 'car' was null. True if all is correct.
      */
-    private boolean validateCar(Car car) {
+    private boolean validateCar(CarEntity car) {
         if (car.getModel().isEmpty() || car.getPrice() < 1.00 || car.getColour() == null || car.getDoors() < 3 || car.getCompany() == null) {
             return false;
         }
@@ -40,8 +40,8 @@ public class CarService {
      * @return List af all cars in DataBase List if it has some registers.
      * @throws EmptyDataBaseException If it can't find any registers.
      */
-    public List<Car> findAllCars() throws EmptyDataBaseException {
-        List<Car> result = repository.findAll();
+    public List<CarEntity> findAllCars() throws EmptyDataBaseException {
+        List<CarEntity> result = repository.findAll();
         if (result.isEmpty()){
             throw new EmptyDataBaseException();
         }
@@ -53,7 +53,7 @@ public class CarService {
      * @param id Car's identification.
      * @return Optional of car if it can find a register. Optional.Empty if it can't.
      */
-    public Optional<Car> findByCarID(Long id) {
+    public Optional<CarEntity> findByCarID(Long id) {
         return repository.findById(id);
     }
 
@@ -63,13 +63,13 @@ public class CarService {
      * @throws NullCarException If one of the car's parameters it's null.
      * @throws DuplicatedCarException If the car's model name, colour and company match with one in DataBase.
      */
-    public void saveCar(Car car) throws DuplicatedCarException, NullCarException {
+    public void saveCar(CarEntity car) throws DuplicatedCarException, NullCarException {
         if (!validateCar(car)) {
             throw new NullCarException();
         }
-        Optional<Car> carRepo = repository.findByModelContainingAndCompany(car.getModel(), car.getCompany());
+        Optional<CarEntity> carRepo = repository.findByModelContainingAndCompany(car.getModel(), car.getCompany());
         if (carRepo.isPresent()) {
-            Car carOb = carRepo.get();
+            CarEntity carOb = carRepo.get();
             if (carOb.getCompany() == car.getCompany() && Objects.equals(carOb.getModel(), car.getModel()) && carOb.getColour() == car.getColour()) {
                 throw new DuplicatedCarException();
             }
@@ -83,7 +83,7 @@ public class CarService {
      * @return False if it can't find a car's id witch matches in DataBase. True if it can find and delete.
      */
     public boolean deleteCarByID(Long id) {
-        Optional<Car> carFind = repository.findById(id);
+        Optional<CarEntity> carFind = repository.findById(id);
         if (carFind.isEmpty()) {
             return false;
         }
@@ -97,7 +97,7 @@ public class CarService {
      * @param model Car's model name.
      * @return One Optional of cars witch matches in DataBase.
      */
-    public List<Car> findByModel(String model){
+    public List<CarEntity> findByModel(String model){
         if(model != null){
             return repository.findByModelContaining(model);
         }
@@ -110,7 +110,7 @@ public class CarService {
      * @return A List of cars if company exists like an enum (will be empty if it doesn't have saved cars).
      * Empty array if company enum type doesn't exist.
      */
-    public List<Car> findByCompany(CarCompany company){
+    public List<CarEntity> findByCompany(CarCompany company){
         if(company != null){
             return repository.findByCompany(company);
         }
@@ -123,7 +123,7 @@ public class CarService {
      * @return A List of cars if color exists like an enum (will be empty if it doesn't have saved cars).
      * Empty array if color enum type doesn't exist.
      */
-    public List<Car> findByColour(CarColors color){
+    public List<CarEntity> findByColour(CarColors color){
         if(color != null){
             return repository.findByColour(color);
         }
@@ -136,7 +136,7 @@ public class CarService {
      * @return A List of Cars if doorsNumber is equals to 2 or 4 and if exists registers in DataBase.
      * Empty array if doorsNumber != 2 or 4, or if it can't find registers int DataBase.
      */
-    public List<Car> findByDoors(int doorsNumber){
+    public List<CarEntity> findByDoors(int doorsNumber){
         if(doorsNumber == 2 || doorsNumber == 4){
             return repository.findByDoors(doorsNumber);
         }
@@ -150,7 +150,7 @@ public class CarService {
      * @return A List of cars if min and max are valid values and the DataBase has registers witch
      * price matches.
      */
-    public List<Car> findByPriceBetween(double min, double max){
+    public List<CarEntity> findByPriceBetween(double min, double max){
         if (min > 0 && max > min){
             return repository.findByPriceBetween(min, max);
         }
@@ -161,7 +161,7 @@ public class CarService {
      * Search and return a List of cars witch has 4x4 traction.
      * @return A List of cars.
      */
-    public List<Car> findByTraction4x4True(){
+    public List<CarEntity> findByTraction4x4True(){
         return repository.findByTraction4x4True();
     }
 
@@ -169,7 +169,7 @@ public class CarService {
      * Search and return a List of cars witch doesn't have 4x4 traction.
      * @return A List of cars.
      */
-    public List<Car> findByTraction4x4False(){
+    public List<CarEntity> findByTraction4x4False(){
         return repository.findByTraction4x4False();
     }
 
@@ -180,7 +180,7 @@ public class CarService {
      * @return An Optional of car if model name and company manufacturer matches with one register in
      * DataBase. Else return an empty List.
      */
-    public Optional<Car> findByModelAndCompany(String model, CarCompany company){
+    public Optional<CarEntity> findByModelAndCompany(String model, CarCompany company){
         if(model != null && company != null){
             return repository.findByModelContainingAndCompany(model, company);
         }
@@ -194,7 +194,7 @@ public class CarService {
      * @return A List of cars if model name and colour matches with one register in Database. Else return
      * an empty List.
      */
-    public List<Car> findByModelAndColour(String model, CarColors color){
+    public List<CarEntity> findByModelAndColour(String model, CarColors color){
         if(model != null && color != null){
             return repository.findByModelContainingAndColour(model, color);
         }
@@ -208,7 +208,7 @@ public class CarService {
      * @param max Maximum price.
      * @return A List of cars if manufacturer and price matches with register in DataBase. Else return an empty List.
      */
-    public List<Car> findByCompanyAndPriceBetween(CarCompany company, double min, double max){
+    public List<CarEntity> findByCompanyAndPriceBetween(CarCompany company, double min, double max){
         if(company != null && min > 0 && max > min){
             return repository.findByCompanyAndPriceBetween(company, min, max);
         }
@@ -221,7 +221,7 @@ public class CarService {
      * @return A List of cars if it can found registers in DataBase.
      * Return an empty List if it can't found registers.
      */
-    public List<Car> findByCompanyAndTraction4x4True(CarCompany company){
+    public List<CarEntity> findByCompanyAndTraction4x4True(CarCompany company){
         if(company != null){
             return repository.findByCompanyAndTraction4x4True(company);
         }
@@ -234,7 +234,7 @@ public class CarService {
      * @return A List of cars if it can found registers in DataBase.
      * Return an empty List if it can't found registers.
      */
-    public List<Car> findByCompanyAndTraction4x4False(CarCompany company){
+    public List<CarEntity> findByCompanyAndTraction4x4False(CarCompany company){
         if(company != null){
             return repository.findByCompanyAndTraction4x4False(company);
         }
