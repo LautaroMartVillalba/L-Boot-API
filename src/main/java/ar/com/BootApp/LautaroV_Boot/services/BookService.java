@@ -65,15 +65,15 @@ public class BookService {
      *
      * @param book Book object to be saved.
      */
-    public void saveBook(BookEntity book) throws NullBookException, DuplicatedBookException {
+    public void saveBook(BookEntity book) /*throws NullBookException, DuplicatedBookException*/ {
         if (!validateBook(book)) {
-            throw new NullBookException();
+//            throw new NullBookException();
         }
         Optional<BookEntity> bookRepo = findByTitleAndAuthor(book.getTitle(), book.getAuthor());
         if (bookRepo.isPresent()) {
             BookEntity bookOb = bookRepo.get();
             if (Objects.equals(book.getTitle(), bookOb.getTitle()) && Objects.equals(book.getAuthor(), bookOb.getAuthor()) && Objects.equals(book.getPublisher(), bookOb.getPublisher())) {
-                throw new DuplicatedBookException();
+//                throw new DuplicatedBookException();
             }
         }
         repository.save(book);

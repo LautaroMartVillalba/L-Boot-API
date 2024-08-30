@@ -1,5 +1,6 @@
 package ar.com.BootApp.LautaroV_Boot.controllers;
 
+import ar.com.BootApp.LautaroV_Boot.entities.book.BookEntity;
 import ar.com.BootApp.LautaroV_Boot.entities.car.CarEntity;
 import ar.com.BootApp.LautaroV_Boot.entities.car.enums.CarColors;
 import ar.com.BootApp.LautaroV_Boot.entities.car.enums.CarCompany;
@@ -9,6 +10,7 @@ import ar.com.BootApp.LautaroV_Boot.exceptions.car.types.NullCarException;
 import ar.com.BootApp.LautaroV_Boot.services.CarService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +19,7 @@ import java.util.Optional;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/cars")
+@PreAuthorize("hasAnyRole('ROLE_DRIVER', 'ROLE_ADMIN', 'ROLE_DEVELOPER')")
 public class CarController {
 
     private CarService service;
@@ -165,5 +168,15 @@ public class CarController {
     public ResponseEntity<CarEntity> postCar(@RequestBody CarEntity car) throws DuplicatedCarException, NullCarException {
         service.saveCar(car);
         return ResponseEntity.ok(car);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_DEVELOPER')")
+    public ResponseEntity<CarEntity> deleteCar(@PathVariable Long id){
+        boolean result = service.deleteCarByID(id);
+        if (result){
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 }

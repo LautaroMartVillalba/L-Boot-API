@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 @Configuration
@@ -22,8 +23,6 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    @Autowired
-    private UserDetailServiceImpl userDetailService;
 
     //First do SecurityFilterChain
     @Bean
@@ -31,15 +30,13 @@ public class SecurityConfig {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(
-                        session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)) //On this Policy, the HttpSession only will be created when required.
+                        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //On this Policy, the HttpSession only will be created when required.
                 .authorizeHttpRequests(
-                        http ->{http.requestMatchers(HttpMethod.POST, "/login").permitAll();
-                                http.requestMatchers(HttpMethod.POST, "/user/insert").permitAll();
-                                http.requestMatchers(HttpMethod.GET, "/tool/all").permitAll();
+                    http ->{http.requestMatchers(HttpMethod.POST, "/login").permitAll();
+                            http.requestMatchers(HttpMethod.POST, "/user/insert").permitAll();
                                 http.anyRequest().authenticated();})
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(Customizer.withDefaults())
-                .authenticationProvider(authenticationProvider(userDetailService))
                 .build();
     }
 

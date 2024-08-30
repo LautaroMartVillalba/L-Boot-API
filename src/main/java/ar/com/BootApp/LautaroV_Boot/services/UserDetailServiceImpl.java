@@ -26,7 +26,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
 
         userEntity.getRole().forEach(role -> authorities.
-                add(new SimpleGrantedAuthority("ROLE_".concat(role.getRoleName().name()))));//Obtain the roleName.
+                add(new SimpleGrantedAuthority("ROLE_".concat(role.getRoleName().name()))));
 
         userEntity.getRole()
                 .stream()
@@ -34,7 +34,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
                 .forEach(privileges -> authorities
                                         .add(new SimpleGrantedAuthority(privileges.getName().name())));
 
-        return new User(userEntity.getName()
+        return new User(userEntity.getEmail()
                         ,userEntity.getPassword()
                         ,userEntity.isEnabled()
                         ,userEntity.isAccountNoExpired()

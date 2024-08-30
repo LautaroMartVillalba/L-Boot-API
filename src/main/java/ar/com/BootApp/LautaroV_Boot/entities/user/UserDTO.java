@@ -11,9 +11,9 @@ import java.util.Set;
 @Getter
 @Setter
 @ToString
-public class UserDTO {
+public class UserDTO extends UserEntity {
 
-    private String name;
+    private String userName;
     private String email;
     private String password;
     private Set<RoleEntity> role = new HashSet<>();

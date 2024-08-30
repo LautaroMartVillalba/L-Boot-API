@@ -17,6 +17,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/tool")
 @AllArgsConstructor
+@PreAuthorize("hasAnyRole('ROLE_MECHANIC', 'ROLE_ADMIN', 'ROLE_DEVELOPER')")
 public class ToolController {
 
     private ToolService service;
@@ -122,6 +123,7 @@ public class ToolController {
     }
 
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_DEVELOPER')")
     public ResponseEntity<Boolean> deleteTool(@PathVariable  Long id){
         boolean result = service.deleteToolByID(id);
         if (!result){

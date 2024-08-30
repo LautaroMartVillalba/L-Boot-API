@@ -8,6 +8,7 @@ import ar.com.BootApp.LautaroV_Boot.exceptions.book.types.NullBookException;
 import ar.com.BootApp.LautaroV_Boot.services.BookService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.awt.print.Pageable;
@@ -17,6 +18,7 @@ import java.util.Optional;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/book")
+@PreAuthorize("hasAnyRole('ROLE_READER', 'ROLE_ADMIN', 'ROLE_DEVELOPER')")
 public class BookController {
 
     private BookService service;
@@ -36,7 +38,9 @@ public class BookController {
         return ResponseEntity.notFound().build();
     }
 
+
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_DEVELOPER')")
     public ResponseEntity<BookEntity> deleteBook(@PathVariable Long id){
         boolean result = service.deleteBookById(id);
         if (result){
