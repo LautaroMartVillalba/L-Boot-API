@@ -1,7 +1,9 @@
 package ar.com.BootApp.LautaroV_Boot.controllers;
 
-import ar.com.BootApp.LautaroV_Boot.entities.user.UserDTO;
-import ar.com.BootApp.LautaroV_Boot.entities.user.UserEntity;
+import ar.com.BootApp.LautaroV_Boot.entities.user.user.UserDTO;
+import ar.com.BootApp.LautaroV_Boot.entities.user.user.UserEntity;
+import ar.com.BootApp.LautaroV_Boot.exceptions.user.types.DuplicatedUserException;
+import ar.com.BootApp.LautaroV_Boot.exceptions.user.types.NullUserException;
 import ar.com.BootApp.LautaroV_Boot.services.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -42,10 +44,10 @@ public class UserController {
 
     @PostMapping("/insert")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<UserDTO> insertUser(@RequestBody UserDTO user){
+    public ResponseEntity<UserEntity> insertUser(@RequestBody UserDTO user) throws NullUserException, DuplicatedUserException {
         if (service.validateUser(user)){
             service.saveUser(user);
-            return ResponseEntity.ok(user);
+            return ResponseEntity.ok().build();
         }
         return ResponseEntity.badRequest().build();
     }

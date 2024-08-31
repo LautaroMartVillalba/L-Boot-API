@@ -12,7 +12,7 @@
 	<artifactId>LautaroV-Boot</artifactId>
 	<version>0.2.1-SNAPSHOT</version>
 	<name>LautaroV-Boot</name>
-	<description>This is a project made by improving my knowledge. In this project I will make some schemas on database (books, tools, cars and cellphones); by a rol system you will (or not) look for the elements in the database, create or delete elements (last two only for admins).</description>
+	<description>This is a project made by improving my knowledge. In this project I will make some schemas on database (books, tools, cars and cellphones); by a rol system you will (or not) look for the elements in the database, create or delete elements.</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -55,7 +55,6 @@
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-database-postgresql</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>

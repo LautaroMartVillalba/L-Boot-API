@@ -1,6 +1,6 @@
 package ar.com.BootApp.LautaroV_Boot.services;
 
-import ar.com.BootApp.LautaroV_Boot.entities.user.UserEntity;
+import ar.com.BootApp.LautaroV_Boot.entities.user.user.UserEntity;
 import ar.com.BootApp.LautaroV_Boot.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

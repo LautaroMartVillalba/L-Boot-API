@@ -2,15 +2,11 @@ package ar.com.BootApp.LautaroV_Boot;
 
 import ar.com.BootApp.LautaroV_Boot.entities.book.BookEntity;
 import ar.com.BootApp.LautaroV_Boot.entities.book.BookGenders;
-import ar.com.BootApp.LautaroV_Boot.entities.car.CarEntity;
-import ar.com.BootApp.LautaroV_Boot.entities.car.enums.CarColors;
-import ar.com.BootApp.LautaroV_Boot.entities.car.enums.CarCompany;
-import ar.com.BootApp.LautaroV_Boot.entities.tool.ToolEntiy;
 import ar.com.BootApp.LautaroV_Boot.entities.user.privileges.PrivilegesEntity;
 import ar.com.BootApp.LautaroV_Boot.entities.user.privileges.PrivilegesEnum;
 import ar.com.BootApp.LautaroV_Boot.entities.user.role.RoleEntity;
 import ar.com.BootApp.LautaroV_Boot.entities.user.role.RoleEnum;
-import ar.com.BootApp.LautaroV_Boot.entities.user.UserEntity;
+import ar.com.BootApp.LautaroV_Boot.entities.user.user.UserEntity;
 import ar.com.BootApp.LautaroV_Boot.repositories.*;
 import ar.com.BootApp.LautaroV_Boot.services.BookService;
 import ar.com.BootApp.LautaroV_Boot.services.CarService;
@@ -25,7 +21,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 
@@ -34,18 +29,18 @@ public class LautaroVBootApplication {
 
 	@Autowired
 	PasswordEncoder encoder;
-//	@Autowired
-//	UserService repository;
-//	@Autowired
-//	BookService bookService;
-//	@Autowired
-//	CarService carService;
-//	@Autowired
-//	ToolService toolService;
-//	@Autowired
-//	PrivilegesEntityRepository privilegesRepo;
-//	@Autowired
-//	RoleEntityRepository roleRepo;
+	@Autowired
+	UserService repository;
+	@Autowired
+	BookService bookService;
+	@Autowired
+	CarService carService;
+	@Autowired
+	ToolService toolService;
+	@Autowired
+	PrivilegesEntityRepository privilegesRepo;
+	@Autowired
+	RoleEntityRepository roleRepo;
 
 	public static void main(String[] args) {
 		ApplicationContext context = SpringApplication.run(LautaroVBootApplication.class, args);
@@ -81,7 +76,7 @@ public class LautaroVBootApplication {
 
 			/*Persist users*/
 			UserEntity admin = UserEntity.builder()
-					.userName("Administrator")
+					.name("Administrator")
 					.email("admin@gmail.com")
 					.password("admin")
 					.role(Set.of(roleAdmin))
@@ -91,7 +86,7 @@ public class LautaroVBootApplication {
 					.isEnabled(true).build();
 
 			UserEntity reader = UserEntity.builder()
-					.userName("Reader")
+					.name("Reader")
 					.email("reader@gmail.com")
 					.password("reader")
 					.role(Set.of(roleReader))
@@ -101,7 +96,7 @@ public class LautaroVBootApplication {
 					.isEnabled(true).build();
 
 			UserEntity driver = UserEntity.builder()
-					.userName("Driver")
+					.name("Driver")
 					.email("driver@gmail.com")
 					.password("driver")
 					.role(Set.of(roleDriver))
@@ -111,7 +106,7 @@ public class LautaroVBootApplication {
 					.isEnabled(true).build();
 
 			UserEntity mechanic = UserEntity.builder()
-					.userName("Mechanic")
+					.name("Mechanic")
 					.email("mechanic@gmail.com")
 					.password("mechanic")
 					.role(Set.of(roleMechanic))
@@ -121,7 +116,7 @@ public class LautaroVBootApplication {
 					.isEnabled(true).build();
 
 			UserEntity developer = UserEntity.builder()
-					.userName("Developer")
+					.name("Developer")
 					.email("developer@gmail.com")
 					.password("developer")
 					.role(Set.of(roleDeveloper))
@@ -131,7 +126,7 @@ public class LautaroVBootApplication {
 					.isEnabled(true).build();
 
 			UserEntity developer2 = UserEntity.builder()
-					.userName("Developer")
+					.name("Developer")
 					.email("developer2@gmail.com")
 					.password("developer")
 					.role(Set.of(roleDeveloper))

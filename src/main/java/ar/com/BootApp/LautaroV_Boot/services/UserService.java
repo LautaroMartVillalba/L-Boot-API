@@ -1,13 +1,14 @@
 package ar.com.BootApp.LautaroV_Boot.services;
 
-import ar.com.BootApp.LautaroV_Boot.entities.user.UserDTO;
-import ar.com.BootApp.LautaroV_Boot.entities.user.UserEntity;
-import ar.com.BootApp.LautaroV_Boot.entities.user.role.RoleEntity;
+import ar.com.BootApp.LautaroV_Boot.entities.user.user.UserDTO;
+import ar.com.BootApp.LautaroV_Boot.entities.user.user.UserEntity;
 import ar.com.BootApp.LautaroV_Boot.entities.user.role.RoleEnum;
+import ar.com.BootApp.LautaroV_Boot.exceptions.user.types.DuplicatedUserException;
+import ar.com.BootApp.LautaroV_Boot.exceptions.user.types.NullUserException;
+import ar.com.BootApp.LautaroV_Boot.repositories.PrivilegesEntityRepository;
 import ar.com.BootApp.LautaroV_Boot.repositories.RoleEntityRepository;
 import ar.com.BootApp.LautaroV_Boot.repositories.UserRepository;
 import lombok.AllArgsConstructor;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,21 +18,28 @@ import java.util.*;
 @AllArgsConstructor
 @Service
 public class UserService {
-
     @Autowired
     private PasswordEncoder encoder;
-
     private UserRepository repository;
-    private RoleEntityRepository roleRepo;
 
+    /**
+     * Verifies the inserted User data.
+     * @param user User information received from POST method.
+     * @return False if one or more of the data is blank, empty or null. True if not.
+     */
     public boolean validateUser(UserEntity user){
-        if (!Objects.equals(user.getEmail(), "") || !Objects.equals(user.getUserName(), "") || !Objects.equals(user.getRole(), null)){
+        if (!Objects.equals(user.getEmail(), "") || !Objects.equals(user.getName(), "") || !Objects.equals(user.getRole(), null)){
             return true;
         }
         return false;
     }
+    /**
+     * Verifies the inserted User data.
+     * @param user User information received from POST method.
+     * @return False if one or more of the data is blank, empty or null. True if not.
+     */
     public boolean validateUser(UserDTO user){
-        if (!Objects.equals(user.getEmail(), "") || !Objects.equals(user.getUserName(), "") || !Objects.equals(user.getRole(), null)){
+        if (!Objects.equals(user.getEmail(), "") || !Objects.equals(user.getName(), "") || !Objects.equals(user.getRole(), null)){
             return true;
         }
         return false;
@@ -67,17 +75,16 @@ public class UserService {
      *
      * @param user User Object to persist in DataBase.
      */
-    public boolean saveUser(UserEntity user){
+    public boolean saveUser(UserEntity user) throws DuplicatedUserException, NullUserException {
         if (!validateUser(user)) {
-            throw new RuntimeException("Not valid user.");
+            throw new NullUserException();
         }
         Optional<UserEntity> userRepo = repository.findUserEntityByEmail(user.getEmail());
         if (userRepo.isPresent()) {
-            throw new RuntimeException("User already exist.");
+            throw new DuplicatedUserException();
         }
-
         UserEntity userSave = UserEntity.builder()
-                .userName(user.getUserName())
+                .name(user.getName())
                 .email(user.getEmail())
                 .password(encoder.encode(user.getPassword()))
                 .credentialsNoExpired(true)
@@ -86,34 +93,34 @@ public class UserService {
                 .accountNoExpired(true)
                 .role(user.getRole())
                 .build();
-
         repository.save(userSave);
         return true;
     }
 
-    public boolean saveUser(UserDTO user){
+    /**
+     * Save a user in DataBase, using a first validation by all tool's parameters.
+     *
+     * @param user UserDTO Object to persist in DataBase.
+     */
+    public boolean saveUser(UserDTO user) throws DuplicatedUserException, NullUserException {
         if (!validateUser(user)) {
-            throw new RuntimeException("Not valid user.");
+            throw new NullUserException();
         }
         Optional<UserEntity> userRepo = repository.findUserEntityByEmail(user.getEmail());
         if (userRepo.isPresent()) {
-            throw new RuntimeException("User already exist.");
+            throw new DuplicatedUserException();
         }
 
-        Optional<RoleEntity> userRole = roleRepo.findByRoleName(String.valueOf(user.getRole()));
-        RoleEntity role = userRole.get();
-
         UserEntity userSave = UserEntity.builder()
-                .userName(user.getUserName())
+                .name(user.getName())
                 .email(user.getEmail())
                 .password(encoder.encode(user.getPassword()))
                 .credentialsNoExpired(true)
                 .isEnabled(true)
                 .accountNoLocked(true)
                 .accountNoExpired(true)
-                .role(Set.of(role))
+                .role(user.getRole())
                 .build();
-
         repository.save(userSave);
         return true;
     }
@@ -135,6 +142,11 @@ public class UserService {
 
     /*--------------------Custom Methods---------------------*/
 
+    /**
+     * Search and return a unique user
+     * @param email
+     * @return
+     */
     public Optional<UserEntity> findUserByEmail(String email){
         if (!Objects.equals(email, "") && email.contains("@gmail.com") || email.contains("@hotmail.com")){
             return repository.findUserEntityByEmail(email);
@@ -151,7 +163,7 @@ public class UserService {
 
     public List<UserEntity> findUserByNameAndRole(String name, RoleEnum role){
         if (Objects.equals(name, "") && role != null){
-            return repository.findByUserNameAndRole(name,role);
+            return repository.findByNameAndRole(name,role);
         }
         return new ArrayList<>();
     }

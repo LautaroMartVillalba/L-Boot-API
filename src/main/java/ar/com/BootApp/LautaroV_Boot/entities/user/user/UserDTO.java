@@ -1,4 +1,4 @@
-package ar.com.BootApp.LautaroV_Boot.entities.user;
+package ar.com.BootApp.LautaroV_Boot.entities.user.user;
 
 import ar.com.BootApp.LautaroV_Boot.entities.user.role.RoleEntity;
 import lombok.*;
@@ -13,7 +13,7 @@ import java.util.Set;
 @ToString
 public class UserDTO extends UserEntity {
 
-    private String userName;
+    private String name;
     private String email;
     private String password;
     private Set<RoleEntity> role = new HashSet<>();

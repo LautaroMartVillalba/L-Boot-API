@@ -1,4 +1,4 @@
-package ar.com.BootApp.LautaroV_Boot.entities.user;
+package ar.com.BootApp.LautaroV_Boot.entities.user.user;
 
 import ar.com.BootApp.LautaroV_Boot.entities.user.role.RoleEntity;
 import jakarta.persistence.*;
@@ -21,7 +21,7 @@ public class UserEntity {
     private Long id;
 
 //    @Column(nullable = false, length = 50)
-    private String userName;
+    private String name;
 
     @Column(nullable = false, unique = true)
     private String email;
