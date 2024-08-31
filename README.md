@@ -1,11 +1,11 @@
 # LBootAPI
 ### About this project
-Were createn to improve my knowledge with Data Base management, EndPoint creating, security configuration, errors resolution and development using Spring Framework.
+Were created to improve my knowledge with Data Base management, EndPoint creating, security configuration, errors resolution and development using Spring Framework.
 ___
 ### How it works?
-- An user was registered with an specific role.
-- The user are persisted in the DataBase (PostgreSQL).
-- By his role, the user are available to access to some EndPoints.
+- A user was registered with a specific role.
+- The user is persisted in the DataBase (PostgreSQL).
+- By his role, the user is available to access to some EndPoints.
 ___
 # Explanation and conventions
 ## Entities
@@ -14,7 +14,7 @@ For convention, the entity's classes will be name with the sufix "Entity", to pr
 The entities use the Builder Pattern for have a confortable construction and improve the recognition of assigned parameters.
 ###   Users
 - Names can be repeated.
-- Emails must be uniques.
+- Emails must be unique.
 - Passwords are encripted with BCrypt.
 - ManyToMany relationship between User and Role.
 - The parameters 'isEnabeled','accountNoExpired','accountNoLocked' y 'credentialsNoExpired' are used by Spring Security during authentication.
@@ -41,18 +41,18 @@ Each repository create custom methods using the JPA Query methods due to its eas
 
 Are named with: the entity's name which is related and the sufix "Reposiroty" (ExampleRepository).
 ## Services
-Services have to implement and use the business logic in ALL custom methos created in the repositories, and the used default methods. 
+Services have to implement and use the business logic in ALL custom methods created in the repositories, and the used default methods. 
 
 Are named with: the repository's name which is related and replace the sufix "Repository" with "Service"(ExampleService).
 #### Business Logic
 Each custom and default methods that will used have to have an implementation that meets the following aspecs:
 - No blank data.
-- No emptu data.
+- No empty data.
 - If not interfere in DataBase: return (in a successful query) the received value, or (in a not successful query) a null or empty value.
 - if interfere in DataBase: return (in a correct and complete execution) a messagge that inform the successful task; or (in a incorrect or incomplete execution) an custom exception managed with ExceptionHandler.
 
 ##### ExceptionHandlers
-- ExceptionDTO: containg the exception parameters to return a specefic messagge (now just have one type String messagge).
+- ExceptionDTO: containg the exception parameters to return a specefic message (now just have one type String messagge).
 - Organization: for each entity will be one package with two packages -> Advice & Types
 Types: Exception classes for each problem will may be in the execution.
 Advice: Use `@RestControllerAdvice` and `@ExceptionHandler` to manage custom exceptions and return a customized message with ResponseEntity<> constructed by ExceptionDTO using Builder Pattern and a HttpStatus.
