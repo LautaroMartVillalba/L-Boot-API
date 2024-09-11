@@ -48,9 +48,9 @@ public class UserService {
     /*----------------Default Methods----------------*/
 
     /**
-     * Search and return a List of all users in DataBase.
+     * Searches and returns a list of all users in the database.
      *
-     * @return List af all users in DataBase List if it has some registers.
+     * @return A list of all users in the database if there are any records.
      */
     public List<UserEntity> findAllUsers(){
         List<UserEntity> result = repository.findAll();
@@ -61,19 +61,19 @@ public class UserService {
     }
 
     /**
-     * Search a user in DataBase by his ID number (long type).
+     * Searches for a user in the database by their ID number (of type long).
      *
-     * @param id User's identification.
-     * @return Optional of tool if it can find a register. Optional.Empty if it can't.
+     * @param id The user's identification number.
+     * @return An Optional of UserEntity if a record is found. Optional.empty() if not.
      */
     public Optional<UserEntity> findByUserID(Long id) {
         return repository.findById(id);
     }
 
     /**
-     * Save a user in DataBase, using a first validation by all tool's parameters.
+     * Saves a user in the database after validating all the user's parameters.
      *
-     * @param user User Object to persist in DataBase.
+     * @param user The User object to persist in the database.
      */
     public boolean saveUser(UserEntity user) throws DuplicatedUserException, NullUserException {
         if (!validateUser(user)) {
@@ -98,9 +98,9 @@ public class UserService {
     }
 
     /**
-     * Save a user in DataBase, using a first validation by all tool's parameters.
+     * Saves a user in the database after validating all the user's parameters.
      *
-     * @param user UserDTO Object to persist in DataBase.
+     * @param user The UserDTO object to persist in the database.
      */
     public boolean saveUser(UserDTO user) throws DuplicatedUserException, NullUserException {
         if (!validateUser(user)) {
@@ -126,10 +126,10 @@ public class UserService {
     }
 
     /**
-     * Search one user in DataBase witch matches with one existing. If it can find, delete the found car.
+     * Searches for a user in the database that matches an existing one. If found, deletes the corresponding user.
      *
-     * @param id User's identification number (long type).
-     * @return False if it can't find a tool's id witch matches in DataBase. True if it can find and delete.
+     * @param id The user's identification number (of type long).
+     * @return False if no matching user ID is found in the database. True if a matching user is found and deleted.
      */
     public boolean deleteUserByID(Long id) {
         Optional<UserEntity> userFind = repository.findById(id);
@@ -143,9 +143,9 @@ public class UserService {
     /*--------------------Custom Methods---------------------*/
 
     /**
-     * Search and return a unique user
-     * @param email
-     * @return
+     * Searches for a unique user by their email.
+     * @param email The user's email.
+     * @return An Optional of UserEntity if found. Optional.empty() if no match is found in the database.
      */
     public Optional<UserEntity> findUserByEmail(String email){
         if (!Objects.equals(email, "") && email.contains("@gmail.com") || email.contains("@hotmail.com")){
@@ -154,6 +154,11 @@ public class UserService {
         return Optional.empty();
     }
 
+    /**
+     * Searches for users in the database by their role.
+     * @param role The user's role.
+     * @return A list of UserEntity objects.
+     */
     public List<UserEntity> findUserByRole(RoleEnum role){
         if (role != null){
             return repository.findByRole(role);
@@ -161,6 +166,12 @@ public class UserService {
         return new ArrayList<>();
     }
 
+    /**
+     * Searches for users in the database by their role and name.
+     * @param name The user's name.
+     * @param role The user's role.
+     * @return A list of UserEntity objects.
+     */
     public List<UserEntity> findUserByNameAndRole(String name, RoleEnum role){
         if (Objects.equals(name, "") && role != null){
             return repository.findByNameAndRole(name,role);

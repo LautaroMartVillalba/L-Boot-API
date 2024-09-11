@@ -37,7 +37,7 @@ public class ToolService {
     /**
      * Search and return a List of all tools in DataBase.
      *
-     * @return List af all tools in DataBase List if it has some registers.
+     * @return List of ToolEntity.
      */
     public List<ToolEntiy> findAllTools() throws ToolEmptyDataBaseException {
         List<ToolEntiy> result = repository.findAll();
@@ -51,7 +51,7 @@ public class ToolService {
      * Search a tool in DataBase by his ID number (long type).
      *
      * @param id Tool's identification.
-     * @return Optional of tool if it can find a register. Optional.Empty if it can't.
+     * @return Optional of ToolEntity. Optional.Empty if it can't.
      */
     public Optional<ToolEntiy> findByToolID(Long id) {
         return repository.findById(id);
@@ -75,11 +75,12 @@ public class ToolService {
     }
 
     /**
-     * Search one tool in DataBase witch matches with one existing. If it can find, delete the found car.
+     * Searches the database for a tool that matches an existing one. If found, deletes the corresponding tool.
      *
-     * @param id Tool's identification number (long type).
-     * @return False if it can't find a tool's id witch matches in DataBase. True if it can find and delete.
+     * @param id The tool's identification number (of type long).
+     * @return False if no matching tool is found in the database. True if a matching tool is found and deleted.
      */
+
     public boolean deleteToolByID(Long id) {
         Optional<ToolEntiy> toolFind = repository.findById(id);
         if (toolFind.isPresent()) {
@@ -90,6 +91,11 @@ public class ToolService {
     }
     /*-------------------Custom Methods-------------------*/
 
+    /**
+     *  Searches the database for tools by their name.
+     * @param name Tool's name.
+     * @return List of ToolEntity or empty list.
+     */
     public List<ToolEntiy> findToolByName(String name) {
         if (!Objects.equals(name, "")) {
             return repository.findByNameContaining(name);
@@ -97,6 +103,11 @@ public class ToolService {
         return new ArrayList<>();
     }
 
+    /**
+     *  Searches the database for tools by their manufacturer's company.
+     * @param company Tool's manufacturer Company.
+     * @return List of ToolEntity or empty list.
+     */
     public List<ToolEntiy> findByCompany(String company) {
         if (!Objects.equals(company, "")) {
             return repository.findByCompanyContaining(company);
@@ -104,6 +115,12 @@ public class ToolService {
         return new ArrayList<>();
     }
 
+    /**
+     * Searches the database for tools with a price between the specified minimum and maximum values.
+     * @param min Min value.
+     * @param max Max value.
+     * @return List of ToolEntity or empty list.
+     */
     public List<ToolEntiy> findToolByPriceBetween(double min, double max) {
         if (min > 0 && max > min) {
             return repository.findByPriceBetween(min, max);
@@ -111,6 +128,12 @@ public class ToolService {
         return new ArrayList<>();
     }
 
+    /**
+     *  Searches the database for tools that match the specified name and company.
+     * @param name Tool's name.
+     * @param company Tool's manufacturer company.
+     * @return List of ToolEntity or empty list.
+     */
     public List<ToolEntiy> findToolByNameAndCompany(String name, String company) {
         if (!Objects.equals(name, "") && !Objects.equals(company, "")) {
             return repository.findByNameContainingAndCompanyContaining(name, company);
@@ -118,6 +141,13 @@ public class ToolService {
         return new ArrayList<>();
     }
 
+    /**
+     *  Searches the database for tools with a price between the specified minimum and maximum values.
+     * @param name Tool's name.
+     * @param min Minimum value.
+     * @param max Maximum value.
+     * @return List of ToolEntity or empty list.
+     */
     public List<ToolEntiy> findToolByNameAndPrice(String name, double min, double max) {
         if (!Objects.equals(name, "") && min > 0 && max > min) {
             return repository.findByNameContainingAndPriceBetween(name, min, max);
@@ -125,6 +155,13 @@ public class ToolService {
         return new ArrayList<>();
     }
 
+    /**
+     * Searches the database for tools by their manufacturer's name and price between the specified minimum and maximum values.
+     * @param company Tool's manufacturer company name.
+     * @param min Minimum value.
+     * @param max Maximum value.
+     * @return List of ToolEntity or empty list.
+     */
     public List<ToolEntiy> findToolByCompanyAndPrice(String company, double min, double max) {
         if (!Objects.equals(company, "") || min <= 0 || max < min) {
             return repository.findByCompanyContainingAndPriceBetween(company, min, max);
