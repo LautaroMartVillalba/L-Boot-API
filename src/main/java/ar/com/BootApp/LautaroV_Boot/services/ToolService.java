@@ -1,9 +1,9 @@
 package ar.com.BootApp.LautaroV_Boot.services;
 
 import ar.com.BootApp.LautaroV_Boot.entities.tool.ToolEntiy;
-import ar.com.BootApp.LautaroV_Boot.exceptions.tool.types.DuplicatedToolException;
-import ar.com.BootApp.LautaroV_Boot.exceptions.tool.types.NullToolException;
-import ar.com.BootApp.LautaroV_Boot.exceptions.tool.types.ToolEmptyDataBaseException;
+import ar.com.BootApp.LautaroV_Boot.exceptions.type.EmptyDataBaseException;
+import ar.com.BootApp.LautaroV_Boot.exceptions.type.ExistingObjectException;
+import ar.com.BootApp.LautaroV_Boot.exceptions.type.NullObjectException;
 import ar.com.BootApp.LautaroV_Boot.repositories.ToolRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -39,10 +39,10 @@ public class ToolService {
      *
      * @return List of ToolEntity.
      */
-    public List<ToolEntiy> findAllTools() throws ToolEmptyDataBaseException {
+    public List<ToolEntiy> findAllTools() throws EmptyDataBaseException {
         List<ToolEntiy> result = repository.findAll();
         if (result.isEmpty()) {
-            throw new ToolEmptyDataBaseException();
+            throw new EmptyDataBaseException();
         }
         return result;
     }
@@ -62,13 +62,13 @@ public class ToolService {
      *
      * @param tool Tool Object to persist in DataBase.
      */
-    public boolean saveTool(ToolEntiy tool) throws NullToolException, DuplicatedToolException {
+    public boolean saveTool(ToolEntiy tool) throws NullObjectException, ExistingObjectException {
         if (!validateTool(tool)) {
-            throw new NullToolException();
+            throw new NullObjectException();
         }
         Optional<ToolEntiy> toolRepo = repository.findByCompanyAndNameAndPriceBetween(tool.getCompany(), tool.getName(), tool.getPrice() - 1, tool.getPrice() + 1);
         if (toolRepo.isPresent()) {
-            throw new DuplicatedToolException();
+            throw new ExistingObjectException();
         }
         repository.save(tool);
         return true;

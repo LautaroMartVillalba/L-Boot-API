@@ -3,10 +3,8 @@ package ar.com.BootApp.LautaroV_Boot.services;
 import ar.com.BootApp.LautaroV_Boot.entities.user.user.UserDTO;
 import ar.com.BootApp.LautaroV_Boot.entities.user.user.UserEntity;
 import ar.com.BootApp.LautaroV_Boot.entities.user.role.RoleEnum;
-import ar.com.BootApp.LautaroV_Boot.exceptions.user.types.DuplicatedUserException;
-import ar.com.BootApp.LautaroV_Boot.exceptions.user.types.NullUserException;
-import ar.com.BootApp.LautaroV_Boot.repositories.PrivilegesEntityRepository;
-import ar.com.BootApp.LautaroV_Boot.repositories.RoleEntityRepository;
+import ar.com.BootApp.LautaroV_Boot.exceptions.type.ExistingObjectException;
+import ar.com.BootApp.LautaroV_Boot.exceptions.type.NullObjectException;
 import ar.com.BootApp.LautaroV_Boot.repositories.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,13 +73,13 @@ public class UserService {
      *
      * @param user The User object to persist in the database.
      */
-    public boolean saveUser(UserEntity user) throws DuplicatedUserException, NullUserException {
+    public boolean saveUser(UserEntity user) throws ExistingObjectException, NullObjectException {
         if (!validateUser(user)) {
-            throw new NullUserException();
+            throw new NullObjectException();
         }
         Optional<UserEntity> userRepo = repository.findUserEntityByEmail(user.getEmail());
         if (userRepo.isPresent()) {
-            throw new DuplicatedUserException();
+            throw new ExistingObjectException();
         }
         UserEntity userSave = UserEntity.builder()
                 .name(user.getName())
@@ -102,13 +100,13 @@ public class UserService {
      *
      * @param user The UserDTO object to persist in the database.
      */
-    public boolean saveUser(UserDTO user) throws DuplicatedUserException, NullUserException {
+    public boolean saveUser(UserDTO user) throws ExistingObjectException, NullObjectException {
         if (!validateUser(user)) {
-            throw new NullUserException();
+            throw new NullObjectException();
         }
         Optional<UserEntity> userRepo = repository.findUserEntityByEmail(user.getEmail());
         if (userRepo.isPresent()) {
-            throw new DuplicatedUserException();
+            throw new ExistingObjectException();
         }
 
         UserEntity userSave = UserEntity.builder()

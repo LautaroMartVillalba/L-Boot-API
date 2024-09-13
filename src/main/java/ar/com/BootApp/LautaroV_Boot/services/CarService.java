@@ -3,9 +3,9 @@ package ar.com.BootApp.LautaroV_Boot.services;
 import ar.com.BootApp.LautaroV_Boot.entities.car.CarEntity;
 import ar.com.BootApp.LautaroV_Boot.entities.car.enums.CarColors;
 import ar.com.BootApp.LautaroV_Boot.entities.car.enums.CarCompany;
-import ar.com.BootApp.LautaroV_Boot.exceptions.car.types.DuplicatedCarException;
-import ar.com.BootApp.LautaroV_Boot.exceptions.car.types.EmptyDataBaseException;
-import ar.com.BootApp.LautaroV_Boot.exceptions.car.types.NullCarException;
+import ar.com.BootApp.LautaroV_Boot.exceptions.type.EmptyDataBaseException;
+import ar.com.BootApp.LautaroV_Boot.exceptions.type.ExistingObjectException;
+import ar.com.BootApp.LautaroV_Boot.exceptions.type.NullObjectException;
 import ar.com.BootApp.LautaroV_Boot.repositories.CarRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -60,18 +60,18 @@ public class CarService {
     /**
      *  Save a car in DataBase, using a first validation by all car's parameters.
      * @param car Car Object to persist in DataBase.
-     * @throws NullCarException If one of the car's parameters it's null.
-     * @throws DuplicatedCarException If the car's model name, colour and company match with one in DataBase.
+     * @throws NullObjectException If one of the car's parameters it's null.
+     * @throws ExistingObjectException If the car's model name, colour and company match with one in DataBase.
      */
-    public void saveCar(CarEntity car) throws DuplicatedCarException, NullCarException {
+    public void saveCar(CarEntity car) throws NullObjectException, ExistingObjectException {
         if (!validateCar(car)) {
-            throw new NullCarException();
+            throw new NullObjectException();
         }
         Optional<CarEntity> carRepo = repository.findByModelContainingAndCompany(car.getModel(), car.getCompany());
         if (carRepo.isPresent()) {
             CarEntity carOb = carRepo.get();
             if (carOb.getCompany() == car.getCompany() && Objects.equals(carOb.getModel(), car.getModel()) && carOb.getColour() == car.getColour()) {
-                throw new DuplicatedCarException();
+                throw new ExistingObjectException();
             }
         }
         repository.save(car);

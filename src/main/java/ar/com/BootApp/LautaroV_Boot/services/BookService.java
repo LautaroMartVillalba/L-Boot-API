@@ -2,9 +2,7 @@ package ar.com.BootApp.LautaroV_Boot.services;
 
 import ar.com.BootApp.LautaroV_Boot.entities.book.BookEntity;
 import ar.com.BootApp.LautaroV_Boot.entities.book.BookGenders;
-import ar.com.BootApp.LautaroV_Boot.exceptions.book.types.DuplicatedBookException;
-import ar.com.BootApp.LautaroV_Boot.exceptions.book.types.BookEmptyDataBaseException;
-import ar.com.BootApp.LautaroV_Boot.exceptions.book.types.NullBookException;
+import ar.com.BootApp.LautaroV_Boot.exceptions.type.EmptyDataBaseException;
 import ar.com.BootApp.LautaroV_Boot.repositories.BookRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -38,10 +36,10 @@ public class BookService {
      *  Search and return all books in the DataBase.
      * @return List
      */
-    public List<BookEntity> findAllBooks() throws BookEmptyDataBaseException {
+    public List<BookEntity> findAllBooks() throws EmptyDataBaseException {
         List<BookEntity> result = repository.findAll();
         if (result.isEmpty()){
-            throw new BookEmptyDataBaseException();
+            throw new EmptyDataBaseException();
         }
         return result;
     }
