@@ -1,9 +1,9 @@
 package ar.com.BootApp.LautaroV_Boot.controllers;
 
 import ar.com.BootApp.LautaroV_Boot.entities.tool.ToolEntiy;
-import ar.com.BootApp.LautaroV_Boot.exceptions.tool.types.DuplicatedToolException;
-import ar.com.BootApp.LautaroV_Boot.exceptions.tool.types.NullToolException;
-import ar.com.BootApp.LautaroV_Boot.exceptions.tool.types.ToolEmptyDataBaseException;
+import ar.com.BootApp.LautaroV_Boot.exceptions.type.EmptyDataBaseException;
+import ar.com.BootApp.LautaroV_Boot.exceptions.type.ExistingObjectException;
+import ar.com.BootApp.LautaroV_Boot.exceptions.type.NullObjectException;
 import ar.com.BootApp.LautaroV_Boot.repositories.ToolRepository;
 import ar.com.BootApp.LautaroV_Boot.services.ToolService;
 import lombok.AllArgsConstructor;
@@ -24,7 +24,7 @@ public class ToolController {
     private ToolRepository repository;
 
     @GetMapping("/all")
-    public ResponseEntity<List<ToolEntiy>> getAllTools() throws ToolEmptyDataBaseException {
+    public ResponseEntity<List<ToolEntiy>> getAllTools() throws EmptyDataBaseException {
         List<ToolEntiy> result = service.findAllTools();
         if (result.isEmpty()){
             return ResponseEntity.notFound().build();
@@ -114,7 +114,7 @@ public class ToolController {
     }
 
     @PostMapping("/insert")
-    public ResponseEntity<ToolEntiy> insertTool(@RequestBody ToolEntiy tool) throws DuplicatedToolException, NullToolException {
+    public ResponseEntity<ToolEntiy> insertTool(@RequestBody ToolEntiy tool) throws ExistingObjectException, NullObjectException {
         boolean result = service.saveTool(tool);
         if (!result){
             return ResponseEntity.badRequest().build();

@@ -1,12 +1,11 @@
 package ar.com.BootApp.LautaroV_Boot.controllers;
 
-import ar.com.BootApp.LautaroV_Boot.entities.book.BookEntity;
 import ar.com.BootApp.LautaroV_Boot.entities.car.CarEntity;
 import ar.com.BootApp.LautaroV_Boot.entities.car.enums.CarColors;
 import ar.com.BootApp.LautaroV_Boot.entities.car.enums.CarCompany;
-import ar.com.BootApp.LautaroV_Boot.exceptions.car.types.DuplicatedCarException;
-import ar.com.BootApp.LautaroV_Boot.exceptions.car.types.EmptyDataBaseException;
-import ar.com.BootApp.LautaroV_Boot.exceptions.car.types.NullCarException;
+import ar.com.BootApp.LautaroV_Boot.exceptions.type.EmptyDataBaseException;
+import ar.com.BootApp.LautaroV_Boot.exceptions.type.ExistingObjectException;
+import ar.com.BootApp.LautaroV_Boot.exceptions.type.NullObjectException;
 import ar.com.BootApp.LautaroV_Boot.services.CarService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -165,7 +164,7 @@ public class CarController {
     }
 
     @PostMapping("/insert")
-    public ResponseEntity<CarEntity> postCar(@RequestBody CarEntity car) throws DuplicatedCarException, NullCarException {
+    public ResponseEntity<CarEntity> postCar(@RequestBody CarEntity car) throws ExistingObjectException, NullObjectException {
         service.saveCar(car);
         return ResponseEntity.ok(car);
     }
