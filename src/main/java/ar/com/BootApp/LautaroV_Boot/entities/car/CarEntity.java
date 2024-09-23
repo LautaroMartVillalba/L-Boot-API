@@ -12,6 +12,7 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
+@Builder
 public class CarEntity {
 
     @Id

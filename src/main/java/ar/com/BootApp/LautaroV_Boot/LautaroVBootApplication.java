@@ -1,12 +1,8 @@
 package ar.com.BootApp.LautaroV_Boot;
 
-import ar.com.BootApp.LautaroV_Boot.entities.book.BookEntity;
-import ar.com.BootApp.LautaroV_Boot.entities.book.BookGenders;
-import ar.com.BootApp.LautaroV_Boot.entities.user.privileges.PrivilegesEntity;
-import ar.com.BootApp.LautaroV_Boot.entities.user.privileges.PrivilegesEnum;
-import ar.com.BootApp.LautaroV_Boot.entities.user.role.RoleEntity;
-import ar.com.BootApp.LautaroV_Boot.entities.user.role.RoleEnum;
-import ar.com.BootApp.LautaroV_Boot.entities.user.user.UserEntity;
+import ar.com.BootApp.LautaroV_Boot.entities.car.CarEntity;
+import ar.com.BootApp.LautaroV_Boot.entities.car.enums.CarColors;
+import ar.com.BootApp.LautaroV_Boot.entities.car.enums.CarCompany;
 import ar.com.BootApp.LautaroV_Boot.repositories.*;
 import ar.com.BootApp.LautaroV_Boot.services.BookService;
 import ar.com.BootApp.LautaroV_Boot.services.CarService;
@@ -19,10 +15,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.List;
-import java.util.Set;
-
 
 @SpringBootApplication
 public class LautaroVBootApplication {

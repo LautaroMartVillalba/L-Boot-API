@@ -8,6 +8,7 @@ import ar.com.BootApp.LautaroV_Boot.exceptions.type.ExistingObjectException;
 import ar.com.BootApp.LautaroV_Boot.exceptions.type.NullObjectException;
 import ar.com.BootApp.LautaroV_Boot.services.CarService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +26,10 @@ public class CarController {
 
     /*---------------------Get Methods-----------------------*/
     @GetMapping("/all")
-    public ResponseEntity<List<CarEntity>> findAll() throws EmptyDataBaseException {
-        List<CarEntity> list = service.findAllCars();
+    public ResponseEntity<Page<CarEntity>> findAll(@RequestParam(defaultValue = "0") int page,
+                                                   @RequestParam(defaultValue = "20") int size)
+            throws EmptyDataBaseException {
+        Page<CarEntity> list = service.findAllCars(page,size);
         if (list.isEmpty()){
             return ResponseEntity.notFound().build();
         }
@@ -44,8 +47,10 @@ public class CarController {
     }
 
     @GetMapping("/by-model/{model}")
-    public ResponseEntity<List<CarEntity>> findByModel (@PathVariable String model){
-        List<CarEntity> result = service.findByModel(model);
+    public ResponseEntity<Page<CarEntity>> findByModel (@PathVariable String model,
+                                                        @RequestParam(defaultValue = "0") int page,
+                                                        @RequestParam(defaultValue = "20") int size){
+        Page<CarEntity> result = service.findByModel(model, page, size);
 
         if (result.isEmpty()){
             return ResponseEntity.notFound().build();
@@ -54,8 +59,10 @@ public class CarController {
     }
 
     @GetMapping("/by-company/CarCompany.{company}")
-    public ResponseEntity<List<CarEntity>> findByCompany (@PathVariable CarCompany company){
-        List<CarEntity> result = service.findByCompany(company);
+    public ResponseEntity<Page<CarEntity>> findByCompany (@PathVariable CarCompany company,
+                                                          @RequestParam(defaultValue = "0") int page,
+                                                          @RequestParam(defaultValue = "20") int size){
+        Page<CarEntity> result = service.findByCompany(company, page, size);
 
         if (result.isEmpty()){
             return ResponseEntity.notFound().build();
@@ -64,8 +71,10 @@ public class CarController {
     }
 
     @GetMapping("/by-colour/CarColors.{color}")
-    public ResponseEntity<List<CarEntity>> findByColour(@PathVariable CarColors color){
-        List<CarEntity> result = service.findByColour(color);
+    public ResponseEntity<Page<CarEntity>> findByColour(@PathVariable CarColors color,
+                                                        @RequestParam(defaultValue = "0") int page,
+                                                        @RequestParam(defaultValue = "20") int size){
+        Page<CarEntity> result = service.findByColour(color, page, size);
 
         if (result.isEmpty()){
             return ResponseEntity.notFound().build();
@@ -74,8 +83,10 @@ public class CarController {
     }
 
     @GetMapping("/by-doors/{doors}")
-    public ResponseEntity<List<CarEntity>> findByDoors (@PathVariable int doors){
-        List<CarEntity> result = service.findByDoors(doors);
+    public ResponseEntity<Page<CarEntity>> findByDoors (@PathVariable int doors,
+                                                        @RequestParam(defaultValue = "0") int page,
+                                                        @RequestParam(defaultValue = "20") int size){
+        Page<CarEntity> result = service.findByDoors(doors, page, size);
 
         if (result.isEmpty() || doors < 2 || doors > 4){
             return ResponseEntity.notFound().build();
@@ -84,8 +95,11 @@ public class CarController {
     }
 
     @GetMapping("/by-price/{min}/{max}")
-    public ResponseEntity<List<CarEntity>> findByPrice(@PathVariable double min, @PathVariable double max){
-        List<CarEntity> result = service.findByPriceBetween(min, max);
+    public ResponseEntity<Page<CarEntity>> findByPrice(@PathVariable double min,
+                                                       @PathVariable double max,
+                                                       @RequestParam(defaultValue = "0") int page,
+                                                       @RequestParam(defaultValue = "20") int size){
+        Page<CarEntity> result = service.findByPriceBetween(min, max, page, size);
 
         if (result.isEmpty() || min < 0 && max <= min){
             return ResponseEntity.notFound().build();
@@ -94,8 +108,9 @@ public class CarController {
     }
 
     @GetMapping("/by-4x4")
-    public ResponseEntity<List<CarEntity>> findBy4x4True(){
-        List<CarEntity> result = service.findByTraction4x4True();
+    public ResponseEntity<Page<CarEntity>> findBy4x4True(@RequestParam(defaultValue = "0") int page,
+                                                         @RequestParam(defaultValue = "20") int size){
+        Page<CarEntity> result = service.findByTraction4x4True(page, size);
 
         if (result.isEmpty()){
             return ResponseEntity.notFound().build();
@@ -104,8 +119,9 @@ public class CarController {
     }
 
     @GetMapping("/by-not-4x4")
-    public ResponseEntity<List<CarEntity>> findBy4x4False(){
-        List<CarEntity> result = service.findByTraction4x4False();
+    public ResponseEntity<Page<CarEntity>> findBy4x4False(@RequestParam(defaultValue = "0") int page,
+                                                          @RequestParam(defaultValue = "20") int size){
+        Page<CarEntity> result = service.findByTraction4x4False(page, size);
 
         if (result.isEmpty()){
             return ResponseEntity.notFound().build();
@@ -114,8 +130,11 @@ public class CarController {
     }
 
     @GetMapping("/by-model&company/{model}/CarCompany.{company}")
-    public ResponseEntity<Optional<CarEntity>> findByModelAndCar(@PathVariable String model,@PathVariable CarCompany company){
-        Optional<CarEntity> result = service.findByModelAndCompany(model, company);
+    public ResponseEntity<Page<CarEntity>> findByModelAndCar(@PathVariable String model,
+                                                                 @PathVariable CarCompany company,
+                                                                 @RequestParam(defaultValue = "0") int page,
+                                                                 @RequestParam(defaultValue = "20") int size){
+        Page<CarEntity> result = service.findByModelAndCompany(model, company, page, size);
 
         if (result.isEmpty()){
             return ResponseEntity.notFound().build();
@@ -124,8 +143,11 @@ public class CarController {
     }
 
     @GetMapping("/by-model&colour/{model}/CarColors.{color}")
-    public ResponseEntity<List<CarEntity>> findbyModelAndColour(@PathVariable String model, @PathVariable CarColors color){
-        List<CarEntity> result = service.findByModelAndColour(model, color);
+    public ResponseEntity<Page<CarEntity>> findbyModelAndColour(@PathVariable String model,
+                                                                @PathVariable CarColors color,
+                                                                @RequestParam(defaultValue = "0") int page,
+                                                                @RequestParam(defaultValue = "20") int size){
+        Page<CarEntity> result = service.findByModelAndColour(model, color, page, size);
 
         if (result.isEmpty()){
             return ResponseEntity.notFound().build();
@@ -134,8 +156,12 @@ public class CarController {
     }
 
     @GetMapping("/by-company&price/CarCompany.{company}/{min}/{max}")
-    public ResponseEntity<List<CarEntity>> findByCompanyAndPrice(@PathVariable CarCompany company, @PathVariable double min, @PathVariable double max){
-        List<CarEntity> result = service.findByCompanyAndPriceBetween(company, min, max);
+    public ResponseEntity<Page<CarEntity>> findByCompanyAndPrice(@PathVariable CarCompany company,
+                                                                 @PathVariable double min,
+                                                                 @PathVariable double max,
+                                                                 @RequestParam(defaultValue = "0") int page,
+                                                                 @RequestParam(defaultValue = "20") int size){
+        Page<CarEntity> result = service.findByCompanyAndPriceBetween(company, min, max, page, size);
 
         if (result.isEmpty()){
             return ResponseEntity.notFound().build();
@@ -144,8 +170,10 @@ public class CarController {
     }
 
     @GetMapping("/by-company&4x4/CarCompany.{company}")
-    public ResponseEntity<List<CarEntity>> findByCompanyAnd4x4True(@PathVariable CarCompany company){
-        List<CarEntity> result  = service.findByCompanyAndTraction4x4True(company);
+    public ResponseEntity<Page<CarEntity>> findByCompanyAnd4x4True(@PathVariable CarCompany company,
+                                                                   @RequestParam(defaultValue = "0") int page,
+                                                                   @RequestParam(defaultValue = "20") int size){
+        Page<CarEntity> result  = service.findByCompanyAndTraction4x4True(company, page, size);
 
         if (result.isEmpty()){
             return ResponseEntity.notFound().build();
@@ -154,8 +182,10 @@ public class CarController {
     }
 
     @GetMapping("/by.company&not4x4/CarCompany.{company}")
-    public ResponseEntity<List<CarEntity>> findByCompanyAnd4x4False(@PathVariable CarCompany company){
-        List<CarEntity> result = service.findByCompanyAndTraction4x4False(company);
+    public ResponseEntity<Page<CarEntity>> findByCompanyAnd4x4False(@PathVariable CarCompany company,
+                                                                    @RequestParam(defaultValue = "0") int page,
+                                                                    @RequestParam(defaultValue = "20") int size){
+        Page<CarEntity> result = service.findByCompanyAndTraction4x4False(company, page, size);
 
         if (result.isEmpty()){
             return ResponseEntity.notFound().build();

@@ -8,10 +8,9 @@ import ar.com.BootApp.LautaroV_Boot.exceptions.type.ExistingObjectException;
 import ar.com.BootApp.LautaroV_Boot.exceptions.type.NullObjectException;
 import ar.com.BootApp.LautaroV_Boot.repositories.CarRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -27,10 +26,7 @@ public class CarService {
      * @return False if any parameter of 'car' was null. True if all is correct.
      */
     private boolean validateCar(CarEntity car) {
-        if (car.getModel().isEmpty() || car.getPrice() < 1.00 || car.getColour() == null || car.getDoors() < 3 || car.getCompany() == null) {
-            return false;
-        }
-        return true;
+        return !car.getModel().isEmpty() && !(car.getPrice() < 1.00) && car.getColour() != null && car.getDoors() >= 3 && car.getCompany() != null;
     }
 
     /*--------------Default Methods--------------*/
@@ -40,8 +36,9 @@ public class CarService {
      * @return List af all cars in DataBase List if it has some registers.
      * @throws EmptyDataBaseException If it can't find any registers.
      */
-    public List<CarEntity> findAllCars() throws EmptyDataBaseException {
-        List<CarEntity> result = repository.findAll();
+    public Page<CarEntity> findAllCars(int page, int size) throws EmptyDataBaseException {
+        PageRequest request = PageRequest.of(page, size);
+        Page<CarEntity> result = repository.findAll(request);
         if (result.isEmpty()){
             throw new EmptyDataBaseException();
         }
@@ -97,11 +94,12 @@ public class CarService {
      * @param model Car's model name.
      * @return One Optional of cars witch matches in DataBase.
      */
-    public List<CarEntity> findByModel(String model){
+    public Page<CarEntity> findByModel(String model, int page, int size){
         if(model != null){
-            return repository.findByModelContaining(model);
+            PageRequest request = PageRequest.of(page, size);
+            return repository.findByModelContaining(model, request);
         }
-        return new ArrayList<>();
+        return Page.empty();
     }
 
     /**
@@ -110,11 +108,12 @@ public class CarService {
      * @return A List of cars if company exists like an enum (will be empty if it doesn't have saved cars).
      * Empty array if company enum type doesn't exist.
      */
-    public List<CarEntity> findByCompany(CarCompany company){
+    public Page<CarEntity> findByCompany(CarCompany company, int page, int size){
         if(company != null){
-            return repository.findByCompany(company);
+            PageRequest request = PageRequest.of(page, size);
+            return repository.findByCompany(company, request);
         }
-        return new ArrayList<>();
+        return Page.empty();
     }
 
     /**
@@ -123,11 +122,12 @@ public class CarService {
      * @return A List of cars if color exists like an enum (will be empty if it doesn't have saved cars).
      * Empty array if color enum type doesn't exist.
      */
-    public List<CarEntity> findByColour(CarColors color){
+    public Page<CarEntity> findByColour(CarColors color, int page, int size){
         if(color != null){
-            return repository.findByColour(color);
+            PageRequest request = PageRequest.of(page, size);
+            return repository.findByColour(color, request);
         }
-        return new ArrayList<>();
+        return Page.empty();
     }
 
     /**
@@ -136,11 +136,12 @@ public class CarService {
      * @return A List of Cars if doorsNumber is equals to 2 or 4 and if exists registers in DataBase.
      * Empty array if doorsNumber != 2 or 4, or if it can't find registers int DataBase.
      */
-    public List<CarEntity> findByDoors(int doorsNumber){
+    public Page<CarEntity> findByDoors(int doorsNumber, int page, int size){
         if(doorsNumber == 2 || doorsNumber == 4){
-            return repository.findByDoors(doorsNumber);
+            PageRequest request = PageRequest.of(page, size);
+            return repository.findByDoors(doorsNumber, request);
         }
-        return new ArrayList<>();
+        return Page.empty();
     }
 
     /**
@@ -150,27 +151,30 @@ public class CarService {
      * @return A List of cars if min and max are valid values and the DataBase has registers witch
      * price matches.
      */
-    public List<CarEntity> findByPriceBetween(double min, double max){
+    public Page<CarEntity> findByPriceBetween(double min, double max, int page, int size){
         if (min > 0 && max > min){
-            return repository.findByPriceBetween(min, max);
+            PageRequest request = PageRequest.of(page, size);
+            return repository.findByPriceBetween(min, max, request);
         }
-        return new ArrayList<>();
+        return Page.empty();
     }
 
     /**
      * Search and return a List of cars witch has 4x4 traction.
      * @return A List of cars.
      */
-    public List<CarEntity> findByTraction4x4True(){
-        return repository.findByTraction4x4True();
+    public Page<CarEntity> findByTraction4x4True(int page, int size){
+        PageRequest request = PageRequest.of(page, size);
+        return repository.findByTraction4x4True(request);
     }
 
     /**
      * Search and return a List of cars witch doesn't have 4x4 traction.
      * @return A List of cars.
      */
-    public List<CarEntity> findByTraction4x4False(){
-        return repository.findByTraction4x4False();
+    public Page<CarEntity> findByTraction4x4False(int page, int size){
+        PageRequest request = PageRequest.of(page, size);
+        return repository.findByTraction4x4False(request);
     }
 
     /**
@@ -184,7 +188,22 @@ public class CarService {
         if(model != null && company != null){
             return repository.findByModelContainingAndCompany(model, company);
         }
-        return null;
+        return Optional.empty();
+    }
+
+    /**
+     * Search and return a List of cars witch matches with a model name and company name if DataBase.
+     * @param model Car's model name.
+     * @param company Car's manufacturer company.
+     * @return An Optional of car if model name and company manufacturer matches with one register in
+     * DataBase. Else return an empty List.
+     */
+    public Page<CarEntity> findByModelAndCompany(String model, CarCompany company, int page, int size){
+        if(model != null && company != null){
+            PageRequest request = PageRequest.of(page, size);
+            return repository.findByModelContainingAndCompany(model, company, request);
+        }
+        return Page.empty();
     }
 
     /**
@@ -194,11 +213,12 @@ public class CarService {
      * @return A List of cars if model name and colour matches with one register in Database. Else return
      * an empty List.
      */
-    public List<CarEntity> findByModelAndColour(String model, CarColors color){
+    public Page<CarEntity> findByModelAndColour(String model, CarColors color, int page, int size){
         if(model != null && color != null){
-            return repository.findByModelContainingAndColour(model, color);
+            PageRequest request = PageRequest.of(page, size);
+            return repository.findByModelContainingAndColour(model, color, request);
         }
-        return new ArrayList<>();
+        return Page.empty();
     }
 
     /**
@@ -208,11 +228,12 @@ public class CarService {
      * @param max Maximum price.
      * @return A List of cars if manufacturer and price matches with register in DataBase. Else return an empty List.
      */
-    public List<CarEntity> findByCompanyAndPriceBetween(CarCompany company, double min, double max){
+    public Page<CarEntity> findByCompanyAndPriceBetween(CarCompany company, double min, double max, int page, int size){
         if(company != null && min > 0 && max > min){
-            return repository.findByCompanyAndPriceBetween(company, min, max);
+            PageRequest request = PageRequest.of(page, size);
+            return repository.findByCompanyAndPriceBetween(company, min, max, request);
         }
-        return new ArrayList<>();
+        return Page.empty();
     }
 
     /**
@@ -221,11 +242,12 @@ public class CarService {
      * @return A List of cars if it can found registers in DataBase.
      * Return an empty List if it can't found registers.
      */
-    public List<CarEntity> findByCompanyAndTraction4x4True(CarCompany company){
+    public Page<CarEntity> findByCompanyAndTraction4x4True(CarCompany company, int page, int size){
         if(company != null){
-            return repository.findByCompanyAndTraction4x4True(company);
+            PageRequest request = PageRequest.of(page, size);
+            return repository.findByCompanyAndTraction4x4True(company, request);
         }
-        return new ArrayList<>();
+        return Page.empty();
     }
 
     /**
@@ -234,11 +256,12 @@ public class CarService {
      * @return A List of cars if it can found registers in DataBase.
      * Return an empty List if it can't found registers.
      */
-    public List<CarEntity> findByCompanyAndTraction4x4False(CarCompany company){
+    public Page<CarEntity> findByCompanyAndTraction4x4False(CarCompany company, int page, int size){
         if(company != null){
-            return repository.findByCompanyAndTraction4x4False(company);
+            PageRequest request = PageRequest.of(page, size);
+            return repository.findByCompanyAndTraction4x4False(company, request);
         }
-        return new ArrayList<>();
+        return Page.empty();
     }
 
 }
