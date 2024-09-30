@@ -6,6 +6,8 @@ import ar.com.BootApp.LautaroV_Boot.exceptions.type.ExistingObjectException;
 import ar.com.BootApp.LautaroV_Boot.exceptions.type.NullObjectException;
 import ar.com.BootApp.LautaroV_Boot.repositories.ToolRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -39,8 +41,9 @@ public class ToolService {
      *
      * @return List of ToolEntity.
      */
-    public List<ToolEntiy> findAllTools() throws EmptyDataBaseException {
-        List<ToolEntiy> result = repository.findAll();
+    public Page<ToolEntiy> findAllTools(int page, int size) throws EmptyDataBaseException {
+        PageRequest request = PageRequest.of(page, size);
+        Page<ToolEntiy> result = repository.findAll(request);
         if (result.isEmpty()) {
             throw new EmptyDataBaseException();
         }
@@ -96,11 +99,12 @@ public class ToolService {
      * @param name Tool's name.
      * @return List of ToolEntity or empty list.
      */
-    public List<ToolEntiy> findToolByName(String name) {
+    public Page<ToolEntiy> findToolByName(String name, int page, int size) {
         if (!Objects.equals(name, "")) {
-            return repository.findByNameContaining(name);
+            PageRequest request = PageRequest.of(page, size);
+            return repository.findByNameContaining(name, request);
         }
-        return new ArrayList<>();
+        return Page.empty();
     }
 
     /**
@@ -108,11 +112,12 @@ public class ToolService {
      * @param company Tool's manufacturer Company.
      * @return List of ToolEntity or empty list.
      */
-    public List<ToolEntiy> findByCompany(String company) {
+    public Page<ToolEntiy> findByCompany(String company, int page, int size) {
         if (!Objects.equals(company, "")) {
-            return repository.findByCompanyContaining(company);
+            PageRequest request = PageRequest.of(page, size);
+            return repository.findByCompanyContaining(company, request);
         }
-        return new ArrayList<>();
+        return Page.empty();
     }
 
     /**
@@ -121,11 +126,12 @@ public class ToolService {
      * @param max Max value.
      * @return List of ToolEntity or empty list.
      */
-    public List<ToolEntiy> findToolByPriceBetween(double min, double max) {
+    public Page<ToolEntiy> findToolByPriceBetween(double min, double max, int page, int size) {
         if (min > 0 && max > min) {
-            return repository.findByPriceBetween(min, max);
+            PageRequest request = PageRequest.of(page, size);
+            return repository.findByPriceBetween(min, max, request);
         }
-        return new ArrayList<>();
+        return Page.empty();
     }
 
     /**
@@ -134,11 +140,12 @@ public class ToolService {
      * @param company Tool's manufacturer company.
      * @return List of ToolEntity or empty list.
      */
-    public List<ToolEntiy> findToolByNameAndCompany(String name, String company) {
+    public Page<ToolEntiy> findToolByNameAndCompany(String name, String company, int page, int size) {
         if (!Objects.equals(name, "") && !Objects.equals(company, "")) {
-            return repository.findByNameContainingAndCompanyContaining(name, company);
+            PageRequest request = PageRequest.of(page, size);
+            return repository.findByNameContainingAndCompanyContaining(name, company, request);
         }
-        return new ArrayList<>();
+        return Page.empty();
     }
 
     /**
@@ -148,11 +155,12 @@ public class ToolService {
      * @param max Maximum value.
      * @return List of ToolEntity or empty list.
      */
-    public List<ToolEntiy> findToolByNameAndPrice(String name, double min, double max) {
+    public Page<ToolEntiy> findToolByNameAndPrice(String name, double min, double max, int page, int size) {
         if (!Objects.equals(name, "") && min > 0 && max > min) {
-            return repository.findByNameContainingAndPriceBetween(name, min, max);
+            PageRequest request = PageRequest.of(page, size);
+            return repository.findByNameContainingAndPriceBetween(name, min, max, request);
         }
-        return new ArrayList<>();
+        return Page.empty();
     }
 
     /**
@@ -162,11 +170,12 @@ public class ToolService {
      * @param max Maximum value.
      * @return List of ToolEntity or empty list.
      */
-    public List<ToolEntiy> findToolByCompanyAndPrice(String company, double min, double max) {
+    public Page<ToolEntiy> findToolByCompanyAndPrice(String company, double min, double max, int page, int size) {
         if (!Objects.equals(company, "") || min <= 0 || max < min) {
-            return repository.findByCompanyContainingAndPriceBetween(company, min, max);
+            PageRequest request = PageRequest.of(page, size);
+            return repository.findByCompanyContainingAndPriceBetween(company, min, max, request);
         }
-        return new ArrayList<>();
+        return Page.empty();
     }
     
 }

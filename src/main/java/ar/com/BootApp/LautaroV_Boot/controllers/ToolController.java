@@ -7,6 +7,8 @@ import ar.com.BootApp.LautaroV_Boot.exceptions.type.NullObjectException;
 import ar.com.BootApp.LautaroV_Boot.repositories.ToolRepository;
 import ar.com.BootApp.LautaroV_Boot.services.ToolService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -24,8 +26,10 @@ public class ToolController {
     private ToolRepository repository;
 
     @GetMapping("/all")
-    public ResponseEntity<List<ToolEntiy>> getAllTools() throws EmptyDataBaseException {
-        List<ToolEntiy> result = service.findAllTools();
+    public ResponseEntity<Page<ToolEntiy>> getAllTools(@RequestParam(defaultValue = "0") int page,
+                                                       @RequestParam(defaultValue = "20") int size)
+                                                        throws EmptyDataBaseException {
+        Page<ToolEntiy> result = service.findAllTools(page, size);
         if (result.isEmpty()){
             return ResponseEntity.notFound().build();
         }
@@ -42,8 +46,10 @@ public class ToolController {
     }
 
     @GetMapping("/by-name/{name}")
-    public ResponseEntity<List<ToolEntiy>> findByName(@PathVariable String name){
-        List<ToolEntiy> result = service.findToolByName(name);
+    public ResponseEntity<Page<ToolEntiy>> findByName(@PathVariable String name,
+                                                      @RequestParam(defaultValue = "0") int page,
+                                                      @RequestParam(defaultValue = "20") int size){
+        Page<ToolEntiy> result = service.findToolByName(name, page, size);
         if (result.isEmpty()){
             return ResponseEntity.notFound().build();
         }
@@ -51,8 +57,10 @@ public class ToolController {
     }
 
     @GetMapping("/by-company/{companyName}")
-    public ResponseEntity<List<ToolEntiy>> findByCompany(@PathVariable String companyName){
-        List<ToolEntiy> result = service.findByCompany(companyName);
+    public ResponseEntity<Page<ToolEntiy>> findByCompany(@PathVariable String companyName,
+                                                         @RequestParam(defaultValue = "0") int page,
+                                                         @RequestParam(defaultValue = "20") int size){
+        Page<ToolEntiy> result = service.findByCompany(companyName, page, size);
         if (result.isEmpty()){
             return ResponseEntity.notFound().build();
         }
@@ -60,8 +68,10 @@ public class ToolController {
     }
 
     @GetMapping("/by-price/{min}/{max}")
-    public ResponseEntity<List<ToolEntiy>> findByPrice(@PathVariable double min, @PathVariable double max){
-        List<ToolEntiy> result = service.findToolByPriceBetween(min, max);
+    public ResponseEntity<Page<ToolEntiy>> findByPrice(@PathVariable double min, @PathVariable double max,
+                                                       @RequestParam(defaultValue = "0") int page,
+                                                       @RequestParam(defaultValue = "20") int size){
+        Page<ToolEntiy> result = service.findToolByPriceBetween(min, max, page, size);
         if (result.isEmpty()){
             return ResponseEntity.notFound().build();
         }
@@ -69,8 +79,11 @@ public class ToolController {
     }
 
     @GetMapping("/by-name&company/{name}/{companyName}")
-    public ResponseEntity<List<ToolEntiy>> findByNameAndCompany(@PathVariable String name,@PathVariable String companyName){
-        List<ToolEntiy> result = service.findToolByNameAndCompany(name, companyName);
+    public ResponseEntity<Page<ToolEntiy>> findByNameAndCompany(@PathVariable String name,
+                                                                @PathVariable String companyName,
+                                                                @RequestParam(defaultValue = "0") int page,
+                                                                @RequestParam(defaultValue = "20") int size){
+        Page<ToolEntiy> result = service.findToolByNameAndCompany(name, companyName, page, size);
         if (result.isEmpty()){
             return ResponseEntity.notFound().build();
         }
@@ -78,8 +91,12 @@ public class ToolController {
     }
 
     @GetMapping("/by-name&price/{name}/{min}/{max}")
-    public ResponseEntity<List<ToolEntiy>> findByNameAndPrice(@PathVariable String name, @PathVariable double min, @PathVariable double max){
-        List<ToolEntiy> result = service.findToolByNameAndPrice(name, min,max);
+    public ResponseEntity<Page<ToolEntiy>> findByNameAndPrice(@PathVariable String name,
+                                                              @PathVariable double min,
+                                                              @PathVariable double max,
+                                                              @RequestParam(defaultValue = "0") int page,
+                                                              @RequestParam(defaultValue = "20") int size){
+        Page<ToolEntiy> result = service.findToolByNameAndPrice(name, min, max, page, size);
         if(result.isEmpty()){
             return ResponseEntity.notFound().build();
         }
@@ -87,8 +104,12 @@ public class ToolController {
     }
 
     @GetMapping("/by-company&price/{company}/{min}/{max}")
-    public ResponseEntity<List<ToolEntiy>> findByCompanyAndPrince(@PathVariable String company, @PathVariable double min, @PathVariable double max){
-        List<ToolEntiy> result = service.findToolByCompanyAndPrice(company, min, max);
+    public ResponseEntity<Page<ToolEntiy>> findByCompanyAndPrince(@PathVariable String company,
+                                                                  @PathVariable double min,
+                                                                  @PathVariable double max,
+                                                                  @RequestParam(defaultValue = "0") int page,
+                                                                  @RequestParam(defaultValue = "20") int size){
+        Page<ToolEntiy> result = service.findToolByCompanyAndPrice(company, min, max, page, size);
         if (result.isEmpty()){
             return ResponseEntity.notFound().build();
         }
@@ -96,8 +117,10 @@ public class ToolController {
     }
 
     @GetMapping("/by-availableTrue")
-    public ResponseEntity<List<ToolEntiy>> findByAvailableTrue(){
-        List<ToolEntiy> result = repository.findByAvailableTrue();
+    public ResponseEntity<Page<ToolEntiy>> findByAvailableTrue(@RequestParam(defaultValue = "0") int page,
+                                                               @RequestParam(defaultValue = "20") int size){
+        PageRequest request = PageRequest.of(page, size);
+        Page<ToolEntiy> result = repository.findByAvailableTrue(request);
         if (result.isEmpty()){
             return ResponseEntity.notFound().build();
         }
@@ -105,8 +128,10 @@ public class ToolController {
     }
 
     @GetMapping("/by-availableFalse")
-    public ResponseEntity<List<ToolEntiy>> findByAvailableFalse(){
-        List<ToolEntiy> result = repository.findByAvailableFalse();
+    public ResponseEntity<Page<ToolEntiy>> findByAvailableFalse(@RequestParam(defaultValue = "0") int page,
+                                                                @RequestParam(defaultValue = "20") int size){
+        PageRequest request = PageRequest.of(page, size);
+        Page<ToolEntiy> result = repository.findByAvailableFalse(request);
         if (result.isEmpty()){
             return ResponseEntity.notFound().build();
         }
